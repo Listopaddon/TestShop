@@ -1,0 +1,90 @@
+﻿@using Microsoft.AspNetCore.Http
+@model IEnumerable<DataAccess.Models.MovieSessionModelUI>
+
+@{
+	ViewData["Title"] = "GetAllMovies";
+}
+
+<h1>GetAllmovies</h1>
+
+
+@if (Context.Session.GetString("loginUser") == "Admin")
+{
+	<p>
+		<a asp-controller="Movie"  asp-action="AddNewMovie">Add new movie</a>
+	</p>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>
+					@Html.DisplayNameFor(model => model.Name)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.Time)
+				</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model)
+			{
+				<tr>
+					<td>
+						@Html.DisplayFor(modelItem => item.Name)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Time)
+					</td>
+					@Html.HiddenFor(modelItem => item.Price)
+					@Html.HiddenFor(modelItem => item.Discription)
+					@Html.HiddenFor(modelItem => item.IdSession)
+					@Html.HiddenFor(modelItem => item.IdHall)
+					@Html.HiddenFor(modelItem => item.IdMovie)
+					<td>
+						 @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+						 @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+						
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+else
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th>
+					@Html.DisplayNameFor(model => model.Name)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.Time)
+				</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model)
+			{
+				<tr>
+					<td>
+						@Html.DisplayFor(modelItem => item.Name)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Time)
+					</td>
+					@Html.HiddenFor(modelItem => item.Price)
+					@Html.HiddenFor(modelItem => item.Discription)
+					@Html.HiddenFor(modelItem => item.IdSession)
+					@Html.HiddenFor(modelItem => item.IdHall)
+					@Html.HiddenFor(modelItem => item.IdMovie)
+					<td>
+						@Html.ActionLink("View cinema", "ViewCinemaByFilm","Cinema", new {  id=item.IdMovie,idSession = item.IdSession })
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+

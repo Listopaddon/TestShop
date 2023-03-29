@@ -1,0 +1,108 @@
+﻿@using Microsoft.AspNetCore.Http
+@model IEnumerable<DataAccess.Models.MovieSessionModelUI>
+
+@{
+    ViewData["Title"] = "GetAllMoviesForCinema";
+}
+
+<h1>GetAllMoviesForCinema</h1>
+
+@if(Context.Session.GetString("loginUser") == "Admin")
+{
+    <p>
+        <a asp-controller="Hall" asp-action="GetHallsByCinema" asp-route-id="@Context.Session.GetString("idCinemaForMovie")">Add new film</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Discription)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Time)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Price)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>                   
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Discription)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Time)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+
+                    @Html.HiddenFor(modelItem => item.IdSession)
+                    @Html.HiddenFor(modelItem => item.IdMovie)
+                    @Html.HiddenFor(modelItem => item.IdHall)
+                    <td>
+                        @Html.ActionLink("See halls", "GetHall","Hall", new {  id=item.IdHall, idSession = item.IdSession })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}else
+{
+   <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Discription)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Time)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Price)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>                   
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Discription)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Time)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+
+                    @Html.HiddenFor(modelItem => item.IdSession)
+                    @Html.HiddenFor(modelItem => item.IdMovie)
+                    @Html.HiddenFor(modelItem => item.IdHall)
+                    <td>
+                        @Html.ActionLink("See halls", "GetHall","Hall", new {  id=item.IdHall, idSession = item.IdSession })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+

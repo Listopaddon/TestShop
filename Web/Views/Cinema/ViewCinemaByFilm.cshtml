@@ -1,0 +1,43 @@
+﻿@using Microsoft.AspNetCore.Http
+@model IEnumerable<CinemaUI>
+
+
+@{
+	ViewData["Title"] = "ViewCinemaByFilm";
+}
+
+<h1>Cinemas where you can watch a movie</h1>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				@Html.DisplayNameFor(model => model.Name)
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		@if (Context.Session.GetString("role") == "Admin")
+		{
+			<h2>Admin</h2>
+		}
+		else
+		{
+			@foreach (var item in Model)
+			{
+				<tr>
+					<td>
+						@Html.DisplayFor(modelItem => item.Name)
+					</td>
+					@Html.HiddenFor(modelItem => item.Picture)
+					@Html.HiddenFor(modelItem => item.Id)
+					<td>
+						@Html.ActionLink("See halls", "GetHallByMovie","Hall", new {  id=item.Id  })
+					</td>
+				</tr>
+			}
+		}
+
+
+	</tbody>
+</table>

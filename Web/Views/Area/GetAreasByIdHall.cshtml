@@ -1,0 +1,34 @@
+﻿@model IEnumerable<AreaUI>
+
+@{
+    ViewData["Title"] = "GetAreasByIdHall";
+}
+
+<h1>All areas in this hall</h1>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				Number area
+			</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item.Id)
+				</td>				
+				@Html.HiddenFor(modelItem => item.IdHall)
+				<td>
+					@Html.ActionLink("See places", "GetAllRowsAndPlaces","Row", new {  id=item.Id }) 
+					@*@Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+					@Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>

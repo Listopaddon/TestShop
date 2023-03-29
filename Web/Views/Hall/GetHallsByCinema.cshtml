@@ -1,0 +1,62 @@
+﻿@using Microsoft.AspNetCore.Http
+@model IEnumerable<HallUI>
+
+@{
+    ViewData["Title"] = "GetHallsByCinema";
+}
+
+<h1>All halls in this cinema</h1>
+
+@if (Context.Session.GetString("loginUser") == "Admin")
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Number hall
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    @Html.HiddenFor(modelItem => item.IdCinema)
+                    <td>
+                        @Html.ActionLink("See movie", "GetOnlyMovieWithoutSession", "Movie", new {  id=item.Id })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    Number hall
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
+                    @Html.HiddenFor(modelItem => item.IdCinema)
+                    <td>
+                        @Html.ActionLink("See areas", "GetAreasByIdHall", "Area", new {  id=item.Id })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

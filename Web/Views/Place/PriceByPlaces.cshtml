@@ -1,0 +1,41 @@
+﻿@model IEnumerable<Web.Models.CheckUI>
+
+@{
+    ViewData["Title"] = "PriceByPlaces";
+}
+
+<h1>Your Check(`s)</h1>
+
+
+<table class="table">    
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                    <div>Name Movie</div><br>
+                @Html.DisplayFor(modelItem => item.NameMovie)<br>
+            </td>
+            <td>
+                    <div>Time Session</div><br>
+                @Html.DisplayFor(modelItem => item.TimeSession)
+            </td>
+            <td>
+                    <div>Number Place</div><br>
+                    @Html.DisplayFor(modelItem => item.NumberPlace)<br>
+            </td>
+            <td>
+                    <div>Number Row</div><br>
+                    @Html.DisplayFor(modelItem => item.NumberRow)<br>
+            </td>
+            <td>
+                    <div>Name Cinema</div><br>
+                    @Html.DisplayFor(modelItem => item.NameCinema)<br>
+            </td>  
+            <td>
+                    <div>Price</div><br>
+                    @Html.DisplayFor(modelItem => item.Price)<br>
+            </td>
+        </tr>
+        }           @Html.ActionLink("Pay", "ResultCheck", "Place") 
+    </tbody>
+</table>

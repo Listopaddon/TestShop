@@ -1,0 +1,50 @@
+﻿@model IEnumerable<RowUI>
+
+@{
+	ViewData["Title"] = "GetAllRowsAndPlaces";
+}
+
+<h1>Chose place which you want</h1>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				@Html.DisplayNameFor(model => model.NumberRow)
+				<li>Number place</li>
+			</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item.NumberRow)
+					<li>
+						@foreach (var item2 in item.Places)
+						{
+							string linkClass = string.Empty;
+
+							if (item2.PlaceSession == null)
+							{
+								linkClass = "btn btn-primary active";
+							}
+							else
+							{
+								linkClass = "btn btn-secondary disabled";
+							}
+							@Html.ActionLink(item2.NumberPlace.ToString(), "PriceByPlaces","Place", new {  id=item2.NumberPlace },new {@class = linkClass,role = "button", aria_pressed ="true"})
+						}
+					</li>
+				</td>
+				<td>
+					@*@Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+				@Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+				@Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>
