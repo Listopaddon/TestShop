@@ -1,29 +1,29 @@
 ﻿@model IEnumerable<CinemaUI>
 
 @{
-    ViewData["Title"] = "Index";
+	ViewData["Title"] = "Index";
 }
 
 <table class="table">
-    <thead>
-        <h1>All cinemas in city</h1>
+	<thead>
+		<h1>All cinemas in your city</h1>
 
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>
-                    <h1>@Html.DisplayFor(modelItem => item.Name)</h1>
-                </td>
-                <td>
-                    <img src="@Html.DisplayFor(modelItem => item.Picture)" width="200" height="200">
-                </td>
-                @Html.HiddenFor(modelItem => item.Id)
-                <td>
-                    @Html.ActionLink("All films in this cinema", "GetAllMoviesForCinema", new {  id=item.Id  })
-                </td>
-            </tr>
-        }
-    </tbody>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>
+					<h1>Name</h1>
+				</td>
+				<td>
+					<img src="@Html.DisplayFor(modelItem => item.Picture)" width="200" height="200">
+				</td>
+				@Html.HiddenFor(modelItem => item.Id)
+				<td>
+					@Html.ActionLink("All films in this cinema", "GetAllMoviesForCinema", new {  id=item.Id  })
+				</td>
+			</tr>
+		}
+	</tbody>
 </table>

@@ -8,10 +8,7 @@ namespace DataAccess.Repositories.Row
     {
         string connectionString;
 
-        public RowRepository(string connectionString)
-        {
-            this.connectionString = connectionString;
-        }
+        public RowRepository(string connectionString) => this.connectionString = connectionString;
 
         public long AddRow(long numberRow, long idArea)
         {
@@ -24,24 +21,17 @@ namespace DataAccess.Repositories.Row
             return (long)CreateCommand("sp_InsertRow", new SqlConnection(connectionString), parameters).ExecuteScalar();
         }
 
-        public void DeleteFkAreas(long idArea)
-        {
-            SqlParameter parameter = new SqlParameter("@IdArea", idArea);
-            CreateCommand("sp_DeleteFKAreasFromRow", new SqlConnection(connectionString), parameter).ExecuteScalar();
-        }
+        public void DeleteFkAreas(long idArea) =>
+            CreateCommand("sp_DeleteFKAreasFromRow", new SqlConnection(connectionString), new SqlParameter("@IdArea", idArea)).ExecuteScalar();
 
-        public void DeleteRow(long id)
-        {
-            SqlParameter parameter = new SqlParameter("@IdRow", id);
-            CreateCommand("sp_DeleteRow", new SqlConnection(connectionString), parameter).ExecuteScalar();
-        }
+        public void DeleteRow(long idRow) =>
+            CreateCommand("sp_DeleteRow", new SqlConnection(connectionString), new SqlParameter("@IdRow", idRow)).ExecuteScalar();
 
         public List<RowModel> GetAreaFromRow(long idArea)
         {
-            SqlParameter parameter = new SqlParameter("@IdArea", idArea);
             List<RowModel> rows = new List<RowModel>();
 
-            var reader = CreateCommand("sp_GetIdAreasFromRow", new SqlConnection(connectionString), parameter).ExecuteReader();
+            var reader = CreateCommand("sp_GetIdAreasFromRow", new SqlConnection(connectionString), new SqlParameter("@IdArea", idArea)).ExecuteReader();
 
             if (reader.HasRows)
             {
@@ -55,12 +45,10 @@ namespace DataAccess.Repositories.Row
             return rows;
         }
 
-        public RowModel GetRow(long id)
+        public RowModel GetRow(long idRow)
         {
-            SqlParameter parameter = new SqlParameter("@IdRow", id);
             RowModel row = null;
-
-            var reader = CreateCommand("sp_GetRow", new SqlConnection(connectionString), parameter).ExecuteReader();
+            var reader = CreateCommand("sp_GetRow", new SqlConnection(connectionString), new SqlParameter("@IdRow", idRow)).ExecuteReader();
 
             if (reader.HasRows)
             {
@@ -77,7 +65,6 @@ namespace DataAccess.Repositories.Row
         public List<RowModel> GetRows()
         {
             List<RowModel> rows = new List<RowModel>();
-
             var reader = CreateCommand("sp_GetRows", new SqlConnection(connectionString)).ExecuteReader();
 
             if (reader.HasRows)
@@ -100,7 +87,6 @@ namespace DataAccess.Repositories.Row
                 new SqlParameter("@NumberRow", row.NumberRow),
                 new SqlParameter("@IdArea", row.IdArea)
             };
-
             CreateCommand("sp_UpdateRow", new SqlConnection(connectionString), parameters).ExecuteScalar();
         }
     }

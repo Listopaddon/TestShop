@@ -1,5 +1,4 @@
-﻿using BCrypt.Net;
-using DataAccess.Models;
+﻿using DataAccess.Models;
 using DataAccess.Repositories.User;
 using System.Collections.Generic;
 
@@ -14,35 +13,19 @@ namespace BusinessLogic.LogicBusiness.User
             this.userRepository = userRepository;
         }
 
-        public long AddUser(string login, string password, string role)
-        {
-            return userRepository.AddUser(login, password, role);
-        }
+        public long AddUser(string login, string password, string role) => userRepository.AddUser(login, password, role);
 
-        public void UpdateUser(UserModel user)
-        {
-            userRepository.UpdateUser(user);
-        }
+        public void UpdateUser(UserModel user) => userRepository.UpdateUser(user);
 
-        public void DeleteUser(long id)
-        {
-            userRepository.DeleteUser(id);
-        }
+        public void DeleteUser(long idUser) => userRepository.DeleteUser(idUser);
 
-        public List<UserModel> GetUsers()
-        {
-            return userRepository.GetUsers();
-        }
+        public List<UserModel> GetUsers() => userRepository.GetUsers();
 
-        public UserModel GetUser(long id)
-        {
-            return userRepository.GetUser(id);
-        }
+        public UserModel GetUser(long idUser) => userRepository.GetUser(idUser);
 
-        public bool IsValidLogin(string login)
-        {
-            return GetUserLogin(login) == null;
-        }
+        public UserModel GetUserLogin(string login) => userRepository.GetUserLogin(login);
+
+        public bool IsValidLogin(string login) => GetUserLogin(login) == null;
 
         public UserModel LogIn(string login, string password)
         {
@@ -64,11 +47,6 @@ namespace BusinessLogic.LogicBusiness.User
         {
             var passHash = BCrypt.Net.BCrypt.HashPassword(password);
             AddUser(login, passHash, "user");
-        }
-
-        public UserModel GetUserLogin(string login)
-        {
-            return userRepository.GetUserLogin(login);
         }
     }
 }

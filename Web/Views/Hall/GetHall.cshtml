@@ -2,73 +2,58 @@
 @model Web.Models.HallUI
 
 @{
-    ViewData["Title"] = "GetHall";
+	ViewData["Title"] = "GetHall";
 }
 
-<h1>GetHall</h1>
+<h1>All halls in this cinema</h1>
 @if (Context.Session.GetString("loginUser") == "Admin")
 {
-    <p>
-        <a asp-action="Create">Create New</a>
-    </p>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Id)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.IdCinema)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>
+					Number hall
+				</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => Model.Id)
+				</td>
+				@Html.HiddenFor(modelItem => Model.IdCinema)
+				<td>
+					@Html.ActionLink("See areas", "GetAreasByIdHall", "Area", new {  id=Model.Id })
+				</td>
+			</tr>
 
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => Model.Id)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => Model.IdCinema)
-                </td>
-                <td>
-                    @Html.ActionLink("See areas", "GetAreasByIdHall", "Area", new {  id=Model.Id })
-                </td>
-            </tr>
-
-        </tbody>
-    </table>
+		</tbody>
+	</table>
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.Id)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.IdCinema)
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>
+					@Html.DisplayNameFor(model => model.Id)
+				</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => Model.Id)
+				</td>
+				@Html.HiddenFor(modelItem => Model.IdCinema)
+				<td>
+					@Html.ActionLink("See areas", "GetAreasByIdHall", "Area", new {  id=Model.Id })
+				</td>
+			</tr>
 
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => Model.Id)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => Model.IdCinema)
-                </td>
-                <td>
-                    @Html.ActionLink("See areas", "GetAreasByIdHall", "Area", new {  id=Model.Id })
-                </td>
-            </tr>
-
-        </tbody>
-    </table>
+		</tbody>
+	</table>
 
 }

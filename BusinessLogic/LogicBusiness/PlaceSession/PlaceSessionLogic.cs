@@ -14,45 +14,27 @@ namespace BusinessLogic.LogicBusiness.PlaceSession
             this.placeSessionRepository = placeSessionRepository;
         }
 
-        public long AddPlaceSession(long idPlaces, long idSession, long idUser, StatePlace state)
-        {
-            return placeSessionRepository.AddPlaceSession(idPlaces, idSession, idUser, state, DateTime.Now);
-        }
+        public long AddPlaceSession(long idPlaces, long idSession, long idUser, StatePlace state) =>
+                                placeSessionRepository.AddPlaceSession(idPlaces, idSession, idUser, state, DateTime.Now);
 
-        public void DeletePlaceSession(long id)
-        {
-            placeSessionRepository.DeletePlaceSession(id);
-        }
+        public void DeletePlaceSession(long idPlaceSession) => placeSessionRepository.DeletePlaceSession(idPlaceSession);
 
-        public void UpdatePlaceSession(PlaceSessionModel placeSession)
-        {
-            placeSessionRepository.UpdatePlaceSession(placeSession);
-        }
+        public void UpdatePlaceSession(PlaceSessionModel placeSession) => placeSessionRepository.UpdatePlaceSession(placeSession);
 
-        public List<PlaceSessionModel> GetPlaceSessions()
-        {
-            return placeSessionRepository.GetPlaceSessions();
-        }
 
-        public List<PlaceSessionModel> GetPlaceSessionFKPlaces(long idPlace)
-        {
-            return placeSessionRepository.GetPlaceSessionFKPlaces(idPlace);
-        }
+        public List<PlaceSessionModel> GetPlaceSessions() => placeSessionRepository.GetPlaceSessions();
 
-        public List<PlaceSessionModel> GetPlaceSessionFKSession(long idSession)
-        {
-            return placeSessionRepository.GetPlaceSessionFKSession(idSession);
-        }
+        public List<PlaceSessionModel> GetPlaceSessionFKPlaces(long idPlace) => placeSessionRepository.GetPlaceSessionFKPlaces(idPlace);
 
-        public List<PlaceSessionModel> GetPlaceSessionFKUser(long idUser)
-        {
-            return placeSessionRepository.GetPlaceSessionFKUser(idUser);
-        }
+        public List<PlaceSessionModel> GetPlaceSessionFKSession(long idSession) => placeSessionRepository.GetPlaceSessionFKSession(idSession);
 
-        public PlaceSessionModel GetPlaceSession(long id)
-        {
-            return placeSessionRepository.GetPlaceSession(id);
-        }
+        public List<PlaceSessionModel> GetPlaceSessionFKUser(long idUser) => placeSessionRepository.GetPlaceSessionFKUser(idUser);
+
+        public PlaceSessionModel GetPlaceSession(long idPlaceSession) => placeSessionRepository.GetPlaceSession(idPlaceSession);
+
+        public void DeleteIdSessionFromPlaceSession(long idSession) => placeSessionRepository.DeleteIdSessionFromPlaceSession(idSession);
+
+        public void DeleteIdUserFromPlaceSession(long idUser) => placeSessionRepository.DeleteIdUserFromPlaceSession(idUser);
 
         public void DeleteIdPlaceFromPlaceSession(long idPlace)
         {
@@ -61,17 +43,6 @@ namespace BusinessLogic.LogicBusiness.PlaceSession
             {
                 placeSessionRepository.DeleteIdPlaceFromPlaceSession(placeSessions[i].IdPlaces);
             }
-
-        }
-
-        public void DeleteIdSessionFromPlaceSession(long idSession)
-        {
-            placeSessionRepository.DeleteIdSessionFromPlaceSession(idSession);
-        }
-
-        public void DeleteIdUserFromPlaceSession(long idUser)
-        {
-            placeSessionRepository.DeleteIdUserFromPlaceSession(idUser);
         }
     }
 }

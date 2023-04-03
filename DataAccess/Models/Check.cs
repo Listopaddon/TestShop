@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Models
 {
     public class Check
     {
+        long idPlaceSession;
         string nameMovie;
         DateTime timeSession;
         int numberPlace;
@@ -15,9 +12,11 @@ namespace DataAccess.Models
         string nameCinema;
         decimal price;
 
-        public Check(string nameMovie, DateTime timeSession, int numberPlace,
-                      long numberRow, string nameCinema, decimal price)
+        public Check(long idPlaceSession, string nameMovie, 
+                     DateTime timeSession, int numberPlace,
+                     long numberRow, string nameCinema, decimal price)
         {
+            this.idPlaceSession = idPlaceSession;
             this.nameMovie = nameMovie;
             this.timeSession = timeSession;
             this.numberPlace = numberPlace;
@@ -26,11 +25,13 @@ namespace DataAccess.Models
             this.price = price;
         }
 
+        public long IdPlaceSession { get { return idPlaceSession; } }
         public string NameMovie { get { return nameMovie; } }
         public DateTime TimeSession { get { return timeSession; } }
         public int NumberPlace { get { return numberPlace; } }
         public long NumberRow { get { return numberRow; } }
         public string NameCinema { get { return nameCinema; } }
         public decimal Price { get { return price; } }
+
     }
 }

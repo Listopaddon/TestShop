@@ -1,6 +1,4 @@
-﻿using DataAccess.Models;
-
-namespace Web.Models
+﻿namespace Web.Models
 {
     public class PlaceUI
     {
@@ -17,17 +15,12 @@ namespace Web.Models
             this.placeSession = placeSession;
         }
 
-        public long Id
-        { get { return id; } }
+        public long Id { get { return id; } }
 
-        public long IdRow
-        { get { return idRow; } }
+        public long IdRow { get { return idRow; } }
 
-        public int NumberPlace
-        { get { return numberPlace; } }
+        public int NumberPlace { get { return numberPlace; } }
 
-        public PlaceSessionUI PlaceSession
-        { get { return placeSession; } }
-
+        public PlaceSessionUI PlaceSession { get { return placeSession; } }
     }
 }

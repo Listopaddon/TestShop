@@ -16,37 +16,24 @@ namespace BusinessLogic.LogicBusiness.Cinema
             this.hallLogic = hallLogic;
         }
 
-        public long AddCinema(string name, string picture)
+        public long AddCinema(string name, string picture) => cinemaRepository.AddCinema(name, picture);
+
+        public List<CinemaModel> GetCinemas() => cinemaRepository.GetCinemas();
+
+        public void UpdateCinema(CinemaModel cinema) => cinemaRepository.UpdateCinema(cinema);
+
+        public CinemaModel GetCinema(long idCinema) => cinemaRepository.GetCinema(idCinema);
+
+        public List<CinemaModel> GetIdCinemaByFilmFromSession(long idMovie) => cinemaRepository.GetIdCinemaByFilmFromSession(idMovie);
+
+        public void DeleteCinema(long idCinema)
         {
-            long id = cinemaRepository.AddCinema(name, picture);
-            return id;
-        }
-        public List<CinemaModel> GetCinemas()
-        {
-            return cinemaRepository.GetCinemas();
-        }
-        public void DeleteCinema(long id)
-        {
-            List<HallModel> halls = hallLogic.GetFKCinema(id);
+            List<HallModel> halls = hallLogic.GetFKCinema(idCinema);
             for (int i = 0; i < halls.Count; i++)
             {
                 hallLogic.DeleteHall(halls[i].Id);
             }
-            cinemaRepository.DeleteCinema(id);
-        }
-        public void UpdateCinema(CinemaModel cinema)
-        {
-            cinemaRepository.UpdateCinema(cinema);
-        }
-
-        public CinemaModel GetCinema(long id)
-        {
-            return cinemaRepository.GetCinema(id);
-        }
-
-        public List<CinemaModel> GetIdCinemaByFilmFromSession(long idMovie)
-        {
-            return cinemaRepository.GetIdCinemaByFilmFromSession(idMovie);
+            cinemaRepository.DeleteCinema(idCinema);
         }
     }
 }

@@ -24,7 +24,7 @@ namespace UnitTestBusinessLogic.Tests.UserTests.SubObjects
         {
             for (int i = 0; i < users.Count; i++)
             {
-                if (users[i].ID == id)
+                if (users[i].Id == id)
                 {
                     users.Remove(users[i]);
                     break;
@@ -38,13 +38,18 @@ namespace UnitTestBusinessLogic.Tests.UserTests.SubObjects
 
             for (int i = 0; i < users.Count; i++)
             {
-                if (users[i].ID == id)
+                if (users[i].Id == id)
                 {
                     result = users[i];
                 }
             }
 
             return result;
+        }
+
+        public UserModel GetUserLogin(string login)
+        {
+            throw new System.NotImplementedException();
         }
 
         public List<UserModel> GetUsers()
@@ -56,7 +61,7 @@ namespace UnitTestBusinessLogic.Tests.UserTests.SubObjects
         {
             for (int i = 0; i < users.Count; i++)
             {
-                if (users[i].ID == user.ID)
+                if (users[i].Id == user.Id)
                 {
                     users[i] = user;
                     break;

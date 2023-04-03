@@ -6,11 +6,12 @@ namespace BusinessLogic.LogicBusiness.Area
     public interface IAreaLogic
     {
         public long AddArea(long idHall);
-        public void DeleteArea(long id);
+        public long AddArea(long idHall, int quantityRows, int quantityPlacesInRow);
+        public void DeleteArea(long idArea);
         public void UpdateArea(AreaModel area);
         public List<AreaModel> GetAreas();
         public List<AreaModel> GetFKHall(long idHall);
-        public AreaModel GetArea(long id);
+        public AreaModel GetArea(long idArea);
         public void DeleteIdHallFromArea(long idHall);
     }
 }

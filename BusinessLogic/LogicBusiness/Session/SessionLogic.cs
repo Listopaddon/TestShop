@@ -7,45 +7,30 @@ namespace BusinessLogic.LogicBusiness.Session
 {
     public class SessionLogic : ISessionLogic
     {
-        ISessionRepository session;
+        ISessionRepository sessionRepository;
         IPlaceSessionLogic placeSessionLogic;
 
-        public SessionLogic(ISessionRepository session, IPlaceSessionLogic placeSessionLogic)
+        public SessionLogic(ISessionRepository sessionRepository, IPlaceSessionLogic placeSessionLogic)
         {
-            this.session = session;
+            this.sessionRepository = sessionRepository;
             this.placeSessionLogic = placeSessionLogic;
         }
 
-        public long AddSession(long idMovie, long idHall, decimal price)
-        {
-            return session.AddSession(idMovie, idHall, price);
-        }
+        public long AddSession(long idMovie, long idHall, decimal price) => sessionRepository.AddSession(idMovie, idHall, price);
 
-        public void DeleteSession(long id)
-        {
-            placeSessionLogic.DeleteIdSessionFromPlaceSession(id);
-            session.DeleteSession(id);
-        }
+        public void DeleteIdHallFromSession(long idHall) => sessionRepository.DeleteIdHallFromSession(idHall);
 
-        public void UpdateSession(SessionModel session)
-        {
-            this.session.UpdateSession(session);
-        }
+        public List<MovieSessionModel> GetAllSessionsAndMovies() => sessionRepository.GetAllSessionsAndMovies();
 
-        public List<SessionModel> GetSessions()
-        {
-            return session.GetSessions();
-        }
+        public List<SessionModel> GetSessionsByMovie(long idMovie) => sessionRepository.GetSessionsByMovie(idMovie);
 
-        public SessionModel GetSession(long id)
-        {
-            return session.GetSession(id);
-        }
+        public void UpdateSession(SessionModel session) => sessionRepository.UpdateSession(session);
 
-        public List<SessionModel> GetFkHall(long idHall)
-        {
-            return session.GetFkHall(idHall);
-        }
+        public List<SessionModel> GetSessions() => sessionRepository.GetSessions();
+
+        public SessionModel GetSession(long id) => sessionRepository.GetSession(id);
+
+        public List<SessionModel> GetFkHall(long idHall) => sessionRepository.GetFkHall(idHall);
 
         public void DeleteFKSessions(List<SessionModel> sessionDtos)
         {
@@ -58,14 +43,12 @@ namespace BusinessLogic.LogicBusiness.Session
             }
         }
 
-        public void DeleteIdHallFromSession(long idHall)
+        public void DeleteSession(long id)
         {
-            session.DeleteIdHallFromSession(idHall);
+            placeSessionLogic.DeleteIdSessionFromPlaceSession(id);
+            sessionRepository.DeleteSession(id);
         }
 
-        public List<MovieSessionModel> GetAllSessionsAndMovies()
-        {
-            return session.GetAllSessionsAndMovies();
-        }
+
     }
 }

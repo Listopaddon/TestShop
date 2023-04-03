@@ -1,25 +1,19 @@
 ﻿using DataAccess.Models;
 using DataAccess.Repositories.ResultChek;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace BusinessLogic.LogicBusiness.ResultChek
 {
     public class GetResultCheckLogic : IGetResultCheckLogic
     {
-        IGetResultCheckRepository repository;
+        IGetResultCheckRepository resultCheckRepository;
 
-        public GetResultCheckLogic(IGetResultCheckRepository repository)
+        public GetResultCheckLogic(IGetResultCheckRepository resultCheckRepository)
         {
-            this.repository = repository;
+            this.resultCheckRepository = resultCheckRepository;
         }
 
-        public List<Check> GetCheck(long idUser)
-        {
-            return repository.GetCheck(idUser);
-        }
+        public List<Check> GetCheck(long idUser) => resultCheckRepository.GetCheck(idUser);
     }
 }

@@ -24,10 +24,7 @@ namespace Web.Controllers
 
 
         [HttpGet]
-        public IActionResult AddMovieForCinema()
-        {
-            return View();
-        }
+        public IActionResult AddMovieForCinema() => View();
 
         [HttpPost]
         [Route("Session/AddMovieForCinema/{idMovie}")]

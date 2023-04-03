@@ -5,22 +5,22 @@
 	ViewData["Title"] = "GetAllMovies";
 }
 
-<h1>GetAllmovies</h1>
+<h1>All movies which you can watch in cinemas</h1>
 
 
 @if (Context.Session.GetString("loginUser") == "Admin")
 {
 	<p>
-		<a asp-controller="Movie"  asp-action="AddNewMovie">Add new movie</a>
+		<a asp-controller="Movie" asp-action="AddNewMovie">Add new movie</a>
 	</p>
 	<table class="table">
 		<thead>
 			<tr>
 				<th>
-					@Html.DisplayNameFor(model => model.Name)
+					Name
 				</th>
 				<th>
-					@Html.DisplayNameFor(model => model.Time)
+					Time
 				</th>
 				<th></th>
 			</tr>
@@ -41,9 +41,10 @@
 					@Html.HiddenFor(modelItem => item.IdHall)
 					@Html.HiddenFor(modelItem => item.IdMovie)
 					<td>
-						 @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-						 @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
-						
+						@Html.ActionLink("View cinema", "ViewCinemaByFilm","Cinema", new {  id=item.IdMovie,idSession = item.IdSession })<br>
+						@Html.ActionLink("Edit", "EditMovie", new {  id=item.IdMovie  }) <br>
+						@Html.ActionLink("Delete", "DeleteMovie", new {  id=item.IdMovie  })<br>
+
 					</td>
 				</tr>
 			}
@@ -56,10 +57,10 @@ else
 		<thead>
 			<tr>
 				<th>
-					@Html.DisplayNameFor(model => model.Name)
+					Name
 				</th>
 				<th>
-					@Html.DisplayNameFor(model => model.Time)
+					Time
 				</th>
 				<th></th>
 			</tr>

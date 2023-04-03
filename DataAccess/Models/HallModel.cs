@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DataAccess.Models
+﻿namespace DataAccess.Models
 {
     public class HallModel
     {
@@ -19,10 +13,8 @@ namespace DataAccess.Models
             this.idCinema = idCinema;
         }
 
-        public long Id
-        { get { return id; } }
+        public long Id { get { return id; } }
 
-        public long IdCinema
-        { get { return idCinema; } }
+        public long IdCinema { get { return idCinema; } }
     }
 }

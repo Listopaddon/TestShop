@@ -90,6 +90,11 @@ namespace UnitTestBusinessLogic.Tests.SessionTests.SubObjects
             return sessions;
         }
 
+        public List<SessionModel> GetSessionsByMovie(long idMovie)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void UpdateSession(SessionModel session)
         {
             for (int i = 0; i < sessions.Count; i++)

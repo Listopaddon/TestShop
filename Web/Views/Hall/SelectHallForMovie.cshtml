@@ -1,39 +1,38 @@
 ﻿@model IEnumerable<Web.Models.HallUI>
 
 @{
-    ViewData["Title"] = "SelectHallForMovie";
+	ViewData["Title"] = "SelectHallForMovie";
 }
 
-<h1>SelectHallForMovie</h1>
+<h1>Select Hall For Movie</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+	<a asp-action="Create">Create New</a>
 </p>
 <table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Id)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IdCinema)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IdCinema)
-            </td>
-            <td>
-                    @Html.ActionLink("AddMovieForCinema", "Session", new {  id=item.Id  }) 
-            </td>
-        </tr>
-}
-    </tbody>
+	<thead>
+		<tr>
+			<th>
+				Number Hall
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.IdCinema)
+			</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item.Id)
+				</td>
+				@Html.HiddenFor(modelItem => item.IdCinema)
+				<td>
+					@Html.ActionLink("AddMovieForCinema", "Session", new {  id=item.Id  })
+				</td>
+			</tr>
+		}
+	</tbody>
 </table>

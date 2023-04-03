@@ -1,0 +1,103 @@
+﻿@using Microsoft.AspNetCore.Http
+@model IEnumerable<RowUI>
+
+@{
+	ViewData["Title"] = "GetAllRowsAndPlaces";
+}
+
+<h1>Chose place which you want</h1>
+
+@if (Context.Session.GetString("loginUser") == "Admin")
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th>
+					@Html.DisplayNameFor(model => model.NumberRow)
+					<li>Number place</li>
+				</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model)
+			{
+				<tr>
+					<td>
+						Number row
+						<li>
+							@foreach (var item2 in item.Places)
+							{
+								string linkClass = string.Empty;
+
+								if (item2.PlaceSession == null)
+								{
+									linkClass = "btn btn-primary active";
+								}
+								else
+								{
+									linkClass = "btn btn-secondary disabled";
+								}
+
+								@Html.ActionLink(item2.NumberPlace.ToString(), "PriceByPlaces","PlaceSession", new {  id=item2.Id },new {@class = linkClass,role = "button", aria_pressed ="true"})
+								@Html.ActionLink("Unbook","UnbookPlace","PlaceSession", new {id = item2.Id})
+								@Html.ActionLink("Edit Place", "EditPlace", "RowAndPlace", new { id = item2.Id })
+							}
+						</li>
+					</td>
+					@Html.HiddenFor(modelItem => item.IdRow)
+				</tr>
+			}
+		</tbody>
+	</table>
+
+	<div>
+		<a asp-controller="Area" asp-action="GetAreasByIdHall" asp-route-id="@Context.Session.GetString("idHallByAddArea")">Back to area</a>
+	</div>
+}
+else
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th>
+					Number row
+					<li>Number place</li>
+				</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model)
+			{
+				<tr>
+					<td>
+						@Html.DisplayFor(modelItem => item.NumberRow)
+						<li>
+							@foreach (var item2 in item.Places)
+							{
+								string linkClass = string.Empty;
+
+								if (item2.PlaceSession == null)
+								{
+									linkClass = "btn btn-primary active";
+								}
+								else
+								{
+									linkClass = "btn btn-secondary disabled";
+								}
+								@Html.ActionLink(item2.NumberPlace.ToString(), "PriceByPlaces","PlaceSession", new {  id=item2.Id },new {@class = linkClass,role = "button", aria_pressed ="true"})
+							}
+						</li>
+					</td>
+					@Html.HiddenFor(modelItem =>item.IdRow)
+				</tr>
+			}
+		</tbody>
+	</table>
+
+	<div>
+		<a asp-controller="Area" asp-action="GetAreasByIdHall" asp-route-id="@Context.Session.GetString("idHallByAddArea")">Back to area</a>
+	</div>
+}
+

@@ -25,7 +25,7 @@ namespace IntegerTestsBusinessLogic.PlaceSessionTests
         public void AddPlaceSessionTest()
         {
             long result = psLogic.AddPlaceSession(3, 3, 3, StatePlace.Book);
-            long expected = psLogic.GetPlaceSession(result).ID;
+            long expected = psLogic.GetPlaceSession(result).Id;
 
             Assert.AreEqual(expected, result);
         }
@@ -46,7 +46,7 @@ namespace IntegerTestsBusinessLogic.PlaceSessionTests
             psLogic.UpdatePlaceSession(expected);
             PlaceSessionModel result = psLogic.GetPlaceSession(id);
 
-            Assert.AreEqual(expected.ID, result.ID);
+            Assert.AreEqual(expected.Id, result.Id);
             Assert.AreEqual(expected.IdPlaces, result.IdPlaces);
             Assert.AreEqual(expected.IdSession, result.IdSession);
             Assert.AreEqual(expected.IdUsers, result.IdUsers);
@@ -61,7 +61,7 @@ namespace IntegerTestsBusinessLogic.PlaceSessionTests
             PlaceSessionModel expected = new PlaceSessionModel(id, 3, 4, 3, new DateTime(20,00),StatePlace.Book);
             PlaceSessionModel result = psLogic.GetPlaceSession(id);
 
-            Assert.AreEqual(expected.ID, result.ID);
+            Assert.AreEqual(expected.Id, result.Id);
             Assert.AreEqual(expected.IdPlaces, result.IdPlaces);
             Assert.AreEqual(expected.IdSession, result.IdSession);
             Assert.AreEqual(expected.IdUsers, result.IdUsers);
@@ -79,7 +79,7 @@ namespace IntegerTestsBusinessLogic.PlaceSessionTests
 
             for (int i = 0; i < result.Count; i++)
             {
-                Assert.AreEqual(expected[i].ID, result[i].ID);
+                Assert.AreEqual(expected[i].Id, result[i].Id);
                 Assert.AreEqual(expected[i].IdPlaces, result[i].IdPlaces);
                 Assert.AreEqual(expected[i].IdSession, result[i].IdSession);
                 Assert.AreEqual(expected[i].IdUsers, result[i].IdUsers);
@@ -101,7 +101,7 @@ namespace IntegerTestsBusinessLogic.PlaceSessionTests
 
             for (int i = 0; i < result.Count; i++)
             {
-                Assert.AreEqual(expected[i].ID, result[i].ID);
+                Assert.AreEqual(expected[i].Id, result[i].Id);
                 Assert.AreEqual(expected[i].IdPlaces, result[i].IdPlaces);
                 Assert.AreEqual(expected[i].IdSession, result[i].IdSession);
                 Assert.AreEqual(expected[i].IdUsers, result[i].IdUsers);
@@ -123,7 +123,7 @@ namespace IntegerTestsBusinessLogic.PlaceSessionTests
 
             for (int i = 0; i < result.Count; i++)
             {
-                Assert.AreEqual(expected[i].ID, result[i].ID);
+                Assert.AreEqual(expected[i].Id, result[i].Id);
                 Assert.AreEqual(expected[i].IdPlaces, result[i].IdPlaces);
                 Assert.AreEqual(expected[i].IdSession, result[i].IdSession);
                 Assert.AreEqual(expected[i].IdUsers, result[i].IdUsers);
@@ -145,7 +145,7 @@ namespace IntegerTestsBusinessLogic.PlaceSessionTests
 
             for (int i = 0; i < result.Count; i++)
             {
-                Assert.AreEqual(expected[i].ID, result[i].ID);
+                Assert.AreEqual(expected[i].Id, result[i].Id);
                 Assert.AreEqual(expected[i].IdPlaces, result[i].IdPlaces);
                 Assert.AreEqual(expected[i].IdSession, result[i].IdSession);
                 Assert.AreEqual(expected[i].IdUsers, result[i].IdUsers);

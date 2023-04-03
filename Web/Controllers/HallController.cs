@@ -1,11 +1,8 @@
 ﻿using AutoMapper;
 using BusinessLogic.LogicBusiness.Hall;
-using BusinessLogic.LogicBusiness.Movie;
-using BusinessLogic.LogicBusiness.Session;
 using DataAccess.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using Web.Models;
@@ -24,8 +21,9 @@ namespace Web.Controllers
 
         }
 
+        [HttpGet]
         [Route("Hall/GetHallsByCinema/{idCinema}")]
-        public IActionResult GetHallsByCinema(long idCinema)//1
+        public IActionResult GetHallsByCinema(long idCinema)
         {
             List<HallModel> halls = hallLogic.GetHallByIdCinema(idCinema);
             var hallsUI = mapper.Map<List<HallUI>>(halls);
@@ -35,17 +33,19 @@ namespace Web.Controllers
 
         [HttpGet]
         [Route("Hall/GetHallByMovie/{idCinema}")]
-        public IActionResult GetHallByMovie(long idCinema)//1
+        public IActionResult GetHallByMovie(long idCinema)
         {
+            HttpContext.Session.SetString("idCinemaByHall", idCinema.ToString());
             long idMovie = Convert.ToInt64(HttpContext.Session.GetString("idMovie"));
-            List<HallModel> halls = hallLogic.GetHallByIdMovie(idMovie,idCinema);
+            List<HallModel> halls = hallLogic.GetHallByIdMovie(idMovie, idCinema);
             var hallsUI = mapper.Map<List<HallUI>>(halls);
 
             return View(hallsUI);
         }
 
+        [HttpGet]
         [Route("Hall/GetHall/{idHall}")]
-        public IActionResult GetHall(long idHall, long idSession)//1
+        public IActionResult GetHall(long idHall, long idSession)
         {
             HttpContext.Session.SetString("idSession", idSession.ToString());
             HallModel hall = hallLogic.GetHall(idHall);
@@ -54,16 +54,23 @@ namespace Web.Controllers
             return View(hallUI);
         }
 
-        //[HttpGet]
-        //[Route("Hall/SelectHallForMovie/{idMoive}")]
-        //public IActionResult SelectHallForMovie(long idMovie)
-        //{
-        //    HttpContext.Session.SetString("idMovieForCinema", idMovie.ToString());
-        //    long idCinema = Convert.ToInt64(HttpContext.Session.GetString("idCinemaForMovie"));
-        //    List<HallModel> halls = hallLogic.GetHallByIdCinema(idCinema);
-        //    var hallsUI = mapper.Map<List<HallUI>>(halls);
+        [HttpGet]
+        public IActionResult AddHall()
+        {
+            long idCinema = Convert.ToInt64(HttpContext.Session.GetString("idCinemaForMovie"));
+            hallLogic.AddHall(idCinema);
+            HttpContext.Request.Headers.TryGetValue("Referer", out var headerValue);
 
-        //    return View(hallsUI);
-        //}
+            return Redirect(headerValue[0]);
+        }
+
+        [HttpGet]
+        [Route("Hall/DeleteHall/{idHall}")]
+        public IActionResult DeleteHall(long idHall)
+        {
+            hallLogic.DeleteHall(idHall);
+            HttpContext.Request.Headers.TryGetValue("Referer", out var headerValue);
+            return Redirect(headerValue[0]);
+        }
     }
 }

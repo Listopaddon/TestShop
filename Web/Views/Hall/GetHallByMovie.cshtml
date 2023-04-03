@@ -1,34 +1,64 @@
-﻿@model IEnumerable<Web.Models.HallUI>
+﻿@using Microsoft.AspNetCore.Http
+@model IEnumerable<Web.Models.HallUI>
 
 @{
-    ViewData["Title"] = "GetHallByMovie";
+	ViewData["Title"] = "GetHallByMovie";
 }
 
-<h1>GetHallByMovie</h1>
+<h1>All halls in this cinema</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                <div>NUmber Hall</div><br/>
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Id)
-            </td>
-                @Html.HiddenFor(modelItem => item.IdCinema)            
-            <td>
-                @Html.ActionLink("See areas", "GetAreasByIdHall", "Area", new {  id=item.Id })
-            </td>
-        </tr>
+@if (Context.Session.GetString("loginUser") == "Admin")
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th>
+					<div>Number Hall</div><br />
+				</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model)
+			{
+				<tr>
+					<td>
+						@Html.DisplayFor(modelItem => item.Id)
+					</td>
+					@Html.HiddenFor(modelItem => item.IdCinema)
+					<td>
+						@Html.ActionLink("See areas", "GetAreasByIdHall", "Area", new {  id=item.Id })
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
 }
-    </tbody>
-</table>
+else
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th>
+					<div>Number Hall</div><br />
+				</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var item in Model)
+			{
+				<tr>
+					<td>
+						@Html.DisplayFor(modelItem => item.Id)
+					</td>
+					@Html.HiddenFor(modelItem => item.IdCinema)
+					<td>
+						@Html.ActionLink("See areas", "GetAreasByIdHall", "Area", new {  id=item.Id })
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+
+}

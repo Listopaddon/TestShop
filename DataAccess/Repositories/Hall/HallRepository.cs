@@ -1,4 +1,5 @@
 ﻿using DataAccess.Models;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 
@@ -8,20 +9,13 @@ namespace DataAccess.Repositories.Hall
     {
         string connectionString;
 
-        public HallRepository(string connectionString)
-        {
-            this.connectionString = connectionString;
-        }
+        public HallRepository(string connectionString) => this.connectionString = connectionString;
 
-        public long AddHall(long idCinema)
-        {
-            SqlParameter[] parameters = new SqlParameter[]
-            {
-                new SqlParameter("@IdCinema", idCinema)
-            };
+        public long AddHall(long idCinema) =>
+            Convert.ToInt64(CreateCommand("sp_InsertHall", new SqlConnection(connectionString), new SqlParameter("@IdCinema", idCinema)).ExecuteScalar());
 
-            return (long)CreateCommand("sp_InsertHall", new SqlConnection(connectionString), parameters).ExecuteScalar();
-        }
+        public void DeleteHall(long idHall) =>
+            CreateCommand("sp_DeleteHall", new SqlConnection(connectionString), new SqlParameter("@IdHall", idHall)).ExecuteScalar();
 
         public List<HallModel> GetHalls()
         {
@@ -36,34 +30,24 @@ namespace DataAccess.Repositories.Hall
                 }
             }
             reader.Close();
+
             return halls;
-        }
-
-        public void DeleteHall(long id)
-        {
-            SqlParameter[] parameters = new SqlParameter[]
-            {
-                new SqlParameter("@Id", id)
-            };
-
-            CreateCommand("sp_DeleteHall", new SqlConnection(connectionString), parameters).ExecuteScalar();
         }
 
         public void UpdateHall(HallModel hall)
         {
             SqlParameter[] parameters = new SqlParameter[]
            {
-               new SqlParameter("@Id", hall.Id),
+               new SqlParameter("@IdHall", hall.Id),
                new SqlParameter("@IdCinema", hall.IdCinema)
            };
-
             CreateCommand("sp_UpdateHall", new SqlConnection(connectionString), parameters).ExecuteScalar();
         }
 
-        public HallModel GetHall(long id)
+        public HallModel GetHall(long idHall)
         {
             var reader = CreateCommand("sp_GetHall", new SqlConnection(connectionString),
-                                       new SqlParameter("@Id", id)).ExecuteReader();
+                                       new SqlParameter("@IdHall", idHall)).ExecuteReader();
             HallModel hallDto = null;
 
             if (reader.HasRows)
@@ -74,6 +58,7 @@ namespace DataAccess.Repositories.Hall
                 }
             }
             reader.Close();
+
             return hallDto;
         }
 
@@ -91,10 +76,11 @@ namespace DataAccess.Repositories.Hall
                 }
             }
             reader.Close();
+
             return hallDtos;
         }
 
-        public List<HallModel> GetHallByIdMovie(long idMovie,long idCinema)
+        public List<HallModel> GetHallByIdMovie(long idMovie, long idCinema)
         {
             SqlParameter[] parameters = new SqlParameter[] {new SqlParameter("@IdMovie", idMovie),
                                                             new SqlParameter("@IdCinema",idCinema) };

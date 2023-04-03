@@ -11,10 +11,8 @@
             this.idHall = idHall;
         }
 
-        public long Id
-        { get { return id; } }
+        public long Id { get { return id; } }
 
-        public long IdHall
-        { get { return idHall; } }
+        public long IdHall { get { return idHall; } }
     }
 }

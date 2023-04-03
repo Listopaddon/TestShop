@@ -23,7 +23,7 @@ namespace IntegerTestsBusinessLogic.UserTests
         public void AddUserTest()
         {
             long result = uLogic.AddUser("TestUser", "1111", "testRole");
-            long expected = uLogic.GetUser(result).ID;
+            long expected = uLogic.GetUser(result).Id;
 
             Assert.AreEqual(expected, result);
         }
@@ -45,7 +45,7 @@ namespace IntegerTestsBusinessLogic.UserTests
             uLogic.UpdateUser(expected);
             UserModel result = uLogic.GetUser(id);
 
-            Assert.AreEqual(expected.ID, result.ID);
+            Assert.AreEqual(expected.Id, result.Id);
             Assert.AreEqual(expected.Login, result.Login);
             Assert.AreEqual(expected.Password, result.Password);
             Assert.AreEqual(expected.Role, result.Role);
@@ -61,7 +61,7 @@ namespace IntegerTestsBusinessLogic.UserTests
 
             for (int i = 0; i < result.Count; i++)
             {
-                Assert.AreEqual(expected[i].ID, result[i].ID);
+                Assert.AreEqual(expected[i].Id, result[i].Id);
                 Assert.AreEqual(expected[i].Login, result[i].Login);
                 Assert.AreEqual(expected[i].Password, result[i].Password);
                 Assert.AreEqual(expected[i].Role, result[i].Role);
@@ -75,7 +75,7 @@ namespace IntegerTestsBusinessLogic.UserTests
             UserModel expected = new UserModel(id, "TestUser", "1111", "testRole");
             UserModel result = uLogic.GetUser(id);
 
-            Assert.AreEqual(expected.ID, result.ID);
+            Assert.AreEqual(expected.Id, result.Id);
             Assert.AreEqual(expected.Login, result.Login);
             Assert.AreEqual(expected.Password, result.Password);
             Assert.AreEqual(expected.Role, result.Role);

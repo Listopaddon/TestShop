@@ -13,6 +13,7 @@ namespace DataAccess.Repositories.Session
         public SessionModel GetSession(long id);
         public void DeleteIdHallFromSession(long idHall);
         public List<MovieSessionModel> GetAllSessionsAndMovies();
+        public List<SessionModel> GetSessionsByMovie(long idMovie);
 
     }
 }

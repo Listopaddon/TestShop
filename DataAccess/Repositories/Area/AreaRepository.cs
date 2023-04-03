@@ -9,37 +9,24 @@ namespace DataAccess.Repositories.Area
     {
         string connectionString;
 
-        public AreaRepository(string connectionString)
-        {
-            this.connectionString = connectionString;
-        }
+        public AreaRepository(string connectionString) => this.connectionString = connectionString;
 
-        public long AddArea(long idHall)
-        {
-            SqlParameter[] parameters = new SqlParameter[]
-            {
-                new SqlParameter("@IdHall", idHall)
-            };
+        public long AddArea(long idHall) =>
+            Convert.ToInt64(CreateCommand("sp_InsertArea", new SqlConnection(connectionString), new SqlParameter("@IdHall", idHall)).ExecuteScalar());
 
-            var result = Convert.ToInt64(CreateCommand("sp_InsertArea", new SqlConnection(connectionString), parameters).ExecuteScalar());
+        public void DeleteArea(long idArea) =>
+            CreateCommand("sp_DeleteArea", new SqlConnection(connectionString), new SqlParameter("@IdArea", idArea)).ExecuteScalar();
 
-            return result;
-        }
-
-        public void DeleteArea(long id) 
-        {
-            SqlParameter parameter = new SqlParameter("@Id", id);
-            CreateCommand("sp_DeleteArea", new SqlConnection(connectionString), parameter).ExecuteScalar();
-        }
+        public void DeleteIdHallFromArea(long idArea) =>
+            CreateCommand("sp_DeleteIdHallFromArea", new SqlConnection(connectionString), new SqlParameter("@IdArea", idArea)).ExecuteScalar();
 
         public void UpdateArea(AreaModel area)
         {
             SqlParameter[] parameters = new SqlParameter[]
             {
-               new SqlParameter("@Id", area.Id),
+               new SqlParameter("@IdArea", area.Id),
                new SqlParameter("@IdHall", area.IdHall)
             };
-
             CreateCommand("sp_UpdateArea", new SqlConnection(connectionString), parameters).ExecuteScalar();
         }
 
@@ -56,6 +43,7 @@ namespace DataAccess.Repositories.Area
                 }
             }
             reader.Close();
+
             return areas;
         }
 
@@ -73,12 +61,13 @@ namespace DataAccess.Repositories.Area
                 }
             }
             reader.Close();
+
             return areas;
         }
 
-        public Models.AreaModel GetArea(long id)
+        public AreaModel GetArea(long idArea)
         {
-            SqlParameter parameter = new SqlParameter("@Id", id);
+            SqlParameter parameter = new SqlParameter("@IdArea", idArea);
             var reader = CreateCommand("sp_GetArea", new SqlConnection(connectionString), parameter).ExecuteReader();
             AreaModel area = null;
 
@@ -90,13 +79,8 @@ namespace DataAccess.Repositories.Area
                 }
             }
             reader.Close();
-            return area;
-        }
 
-        public void DeleteIdHallFromArea(long idArea)
-        {
-            SqlParameter parameter = new SqlParameter("@Id", idArea);
-            CreateCommand("sp_DeleteIdHallFromArea", new SqlConnection(connectionString), parameter).ExecuteScalar();
+            return area;
         }
     }
 }

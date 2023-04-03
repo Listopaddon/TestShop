@@ -1,30 +1,30 @@
-﻿@model Web.Models.SessionUI
+﻿@using Microsoft.AspNetCore.Http
+@model Web.Models.SessionUI
 
 @{
-    ViewData["Title"] = "AddMovieForCinema";
+	ViewData["Title"] = "AddMovieForCinema";
 }
 
-<h1>AddMovieForCinema</h1>
+<h1>Add movie for cinema</h1>
 
-<h4>SessionUI</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="AddMovieForCinema">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>            
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+	<div class="col-md-4">
+		<form asp-action="AddMovieForCinema">
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			<div class="form-group">
+				<label asp-for="Price" class="control-label"></label>
+				<input asp-for="Price" class="form-control" />
+				<span asp-validation-for="Price" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<input type="submit" value="Create" class="btn btn-primary" />
+			</div>
+		</form>
+	</div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+	<a asp-controller="Movie" asp-action="GetOnlyMovieWithoutSession" asp-route-id="@Context.Session.GetString("idHall")">Back to movies</a>
 </div>
 

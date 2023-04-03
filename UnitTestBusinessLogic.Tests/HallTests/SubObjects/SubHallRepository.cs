@@ -97,6 +97,11 @@ namespace UnitTestBusinessLogic.Tests.HallTests.SubObjects
             return resultHall;
         }
 
+        public List<HallModel> GetHallByIdMovie(long idMovie, long idCinema)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public List<HallModel> GetHalls()
         {
             return halls;

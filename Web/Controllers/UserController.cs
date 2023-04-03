@@ -1,9 +1,7 @@
-﻿using AutoMapper;
-using BusinessLogic.LogicBusiness.User;
+﻿using BusinessLogic.LogicBusiness.User;
 using DataAccess.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Web.Models;
 
 namespace Web.Controllers
 {
@@ -11,10 +9,7 @@ namespace Web.Controllers
     {
         IUserLogic userLogic;
 
-        public UserController(IUserLogic userLogic)
-        {
-            this.userLogic = userLogic;
-        }
+        public UserController(IUserLogic userLogic)=> this.userLogic = userLogic;
 
         [HttpPost]
         public IActionResult LogIn(string login, string password)
@@ -24,7 +19,7 @@ namespace Web.Controllers
             {
                 return RedirectToAction("UserWasNotFound", "User");
             }
-            SetUserSession(user.ID.ToString(), user.Login);
+            SetUserSession(user.Id.ToString(), user.Login);
 
             return Redirect(HttpContext.Session.GetString("redirectURL"));
         }
@@ -38,10 +33,7 @@ namespace Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult Registration()
-        {
-            return View();
-        }
+        public IActionResult Registration() => View();
 
         [HttpPost]
         public IActionResult Registration(string login, string password)
@@ -52,16 +44,13 @@ namespace Web.Controllers
             }
             userLogic.Registration(login, password);
 
-
-
             return Redirect(HttpContext.Session.GetString("redirectURL"));
         }
 
-        public IActionResult UserWasNotFound()
-        {
-            return View();
-        }
+        [HttpGet]
+        public IActionResult UserWasNotFound() => View();
 
+        [HttpGet]
         public IActionResult LogOut()
         {
             HttpContext.Session.Clear();

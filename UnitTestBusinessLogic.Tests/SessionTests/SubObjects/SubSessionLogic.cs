@@ -39,6 +39,11 @@ namespace UnitTestBusinessLogic.Tests.SessionTests.SubObjects
             return new List<SessionModel>();
         }
 
+        public List<SessionModel> GetSessionsByMovie(long idMovie)
+        {
+            throw new NotImplementedException();
+        }
+
         public void UpdateSession(SessionModel session) { }
     }
 }

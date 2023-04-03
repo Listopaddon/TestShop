@@ -1,0 +1,64 @@
+﻿@model IEnumerable<Web.Models.CheckUI>
+
+@{
+	ViewData["Title"] = "Basket";
+}
+
+<h1>Basket</h1>
+
+<table class="table">
+	<thead>
+		<tr>
+
+			<th>
+				Name Movie
+			</th>
+			<th>
+				Time Session
+			</th>
+			<th>
+				Number Place
+			</th>
+			<th>
+				Number Row
+			</th>
+			<th>
+				Name Cinema
+			</th>
+			<th>
+				Price
+			</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item.NameMovie)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.TimeSession)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.NumberPlace)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.NumberRow)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.NameCinema)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Price)
+				</td>
+				@Html.HiddenFor(modelItem => item.IdPlaceSession)
+				<td>
+					@Html.ActionLink("Delete check", "DeleteCheck", "PlaceSession", new {id = item.IdPlaceSession})
+				</td>
+			</tr>
+		}
+		@Html.ActionLink("Pay", "ResultCheck", "PlaceSession")
+	</tbody>
+</table>

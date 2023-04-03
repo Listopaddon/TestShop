@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DataAccess.Models
+﻿namespace DataAccess.Models
 {
     public class CinemaModel
     {
@@ -19,14 +13,10 @@ namespace DataAccess.Models
             this.picture = picture;
         }
 
-        public long Id
-        { get { return id; } }
+        public long Id { get { return id; } }
 
-        public string Name
-        { get { return name; } }
+        public string Name { get { return name; } }
 
-        public string Picture
-        { get { return picture; } }
-
+        public string Picture { get { return picture; } }
     }
 }

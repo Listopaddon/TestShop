@@ -7,12 +7,13 @@ namespace DataAccess.Models
         long id;
         long idPlaces;
         long idSession;
-        long idUsers;        
+        long idUsers;
         DateTime dateModified;
         StatePlace state;
 
         public PlaceSessionModel() { }
-        public PlaceSessionModel(long id, long idPlaces, long idSession, long idUsers, DateTime dateModified, StatePlace state)
+        public PlaceSessionModel(long id, long idPlaces, long idSession,
+                                 long idUsers, DateTime dateModified, StatePlace state)
         {
             this.id = id;
             this.idPlaces = idPlaces;
@@ -22,24 +23,17 @@ namespace DataAccess.Models
             this.dateModified = dateModified;
         }
 
-        public long ID
-        { get { return id; } }
+        public long Id { get { return id; } }
 
-        public long IdPlaces
-        { get { return idPlaces; } }
+        public long IdPlaces { get { return idPlaces; } }
 
-        public long IdSession
-        { get { return idSession; } }
+        public long IdSession { get { return idSession; } }
 
-        public long IdUsers
-        { get { return idUsers; } }
+        public long IdUsers { get { return idUsers; } }
 
-        public StatePlace State
-        { get { return state; } }
+        public StatePlace State { get { return state; } }
 
-        public DateTime DateModified
-        {
-            get { return dateModified; }
-        }
+        public DateTime DateModified { get { return dateModified; } }
+
     }
 }

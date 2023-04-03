@@ -9,10 +9,7 @@ namespace DataAccess.Repositories.Movie
     {
         string connectionString;
 
-        public MovieRepository(string connectionString)
-        {
-            this.connectionString = connectionString;
-        }
+        public MovieRepository(string connectionString) => this.connectionString = connectionString;
 
         public long AddMovie(string name, string discription, DateTime time)
         {
@@ -23,24 +20,17 @@ namespace DataAccess.Repositories.Movie
                 new SqlParameter("@Time", time)
             };
 
-            return (long)CreateCommand("sp_InsertMovie", new SqlConnection(connectionString), parameters).ExecuteScalar();
+            return Convert.ToInt64(CreateCommand("sp_InsertMovie", new SqlConnection(connectionString), parameters).ExecuteScalar());
         }
 
-        public void DeleteMovie(long id)
-        {
-            SqlParameter[] parameters = new SqlParameter[]
-            {
-                new SqlParameter("@Id", id)
-            };
-
-            CreateCommand("sp_DeleteMovie", new SqlConnection(connectionString), parameters).ExecuteScalar();
-        }
+        public void DeleteMovie(long idMovie) =>
+            CreateCommand("sp_DeleteMovie", new SqlConnection(connectionString), new SqlParameter("@IdMovie", idMovie)).ExecuteScalar();
 
         public void UpdateMovie(MovieModel movie)
         {
             SqlParameter[] parameters = new SqlParameter[]
             {
-               new SqlParameter("@Id", movie.Id),
+               new SqlParameter("@IdMovie", movie.Id),
                 new SqlParameter("@Name", movie.Name),
                 new SqlParameter("@Discription", movie.Discription),
                 new SqlParameter("@Time", movie.Time)
@@ -63,13 +53,14 @@ namespace DataAccess.Repositories.Movie
                 }
             }
             reader.Close();
+
             return movies;
         }
 
-        public MovieModel GetMovie(long id)
+        public MovieModel GetMovie(long idMovie)
         {
             MovieModel result = null;
-            SqlParameter parameter = new SqlParameter("@IdMovie", id);
+            SqlParameter parameter = new SqlParameter("@IdMovie", idMovie);
             var reader = CreateCommand("sp_GetMovie", new SqlConnection(connectionString), parameter).ExecuteReader();
 
             if (reader.HasRows)
@@ -81,6 +72,7 @@ namespace DataAccess.Repositories.Movie
                 }
             }
             reader.Close();
+
             return result;
         }
 
@@ -94,14 +86,6 @@ namespace DataAccess.Repositories.Movie
             {
                 while (reader.Read())
                 {
-                    long a = reader.GetInt64(0);
-                    string b = reader.GetString(1);
-                    string c = reader.GetString(2);
-                    DateTime v = reader.GetDateTime(3);
-                    long w = reader.GetInt64(4);
-                    long e = reader.GetInt64(5);
-                    decimal r = reader.GetDecimal(6);
-
                     movies.Add(new MovieSessionModel(reader.GetInt64(0), reader.GetString(1), reader.GetString(2),
                                                      reader.GetDateTime(3), reader.GetInt64(4), reader.GetInt64(5), reader.GetDecimal(6)));
                 }

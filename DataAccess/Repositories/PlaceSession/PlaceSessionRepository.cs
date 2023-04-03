@@ -9,10 +9,19 @@ namespace DataAccess.Repositories.PlaceSession
     {
         string connectionString;
 
-        public PlaceSessionRepository(string connectionString)
-        {
-            this.connectionString = connectionString;
-        }
+        public PlaceSessionRepository(string connectionString) => this.connectionString = connectionString;
+
+        public void DeletePlaceSession(long id) =>
+            CreateCommand("sp_DeletePlaceSession", new SqlConnection(connectionString), new SqlParameter("@Id", id)).ExecuteScalar();
+        public void DeleteIdPlaceFromPlaceSession(long idPlace) =>
+           CreateCommand("sp_DeleteIdPlaceFromPlaceSession", new SqlConnection(connectionString), new SqlParameter("@IdPlace", idPlace)).ExecuteScalar();
+
+        public void DeleteIdSessionFromPlaceSession(long idSession) =>
+            CreateCommand("sp_DeleteIdSessionFromPlaceSession", new SqlConnection(connectionString),
+                                                                new SqlParameter("@IdSession", idSession)).ExecuteScalar();
+
+        public void DeleteIdUserFromPlaceSession(long idUser) =>
+            CreateCommand("sp_DeleteIdUserFromPlaceSession", new SqlConnection(connectionString), new SqlParameter("@IdUser", idUser)).ExecuteScalar();
 
         public long AddPlaceSession(long idPlaces, long idSession, long idUser, StatePlace state, DateTime dateModified)
         {
@@ -25,20 +34,14 @@ namespace DataAccess.Repositories.PlaceSession
                 new SqlParameter("@State",state)
             };
 
-            return (long)CreateCommand("sp_InsertPlaceSession", new SqlConnection(connectionString), parameters).ExecuteScalar();
-        }
-
-        public void DeletePlaceSession(long id)
-        {
-            CreateCommand("sp_DeletePlaceSession", new SqlConnection(connectionString),
-                           new SqlParameter("@Id", id)).ExecuteScalar();
+            return Convert.ToInt64(CreateCommand("sp_InsertPlaceSession", new SqlConnection(connectionString), parameters).ExecuteScalar());
         }
 
         public void UpdatePlaceSession(PlaceSessionModel placeSession)
         {
             SqlParameter[] parameters = new SqlParameter[]
            {
-                new SqlParameter("@Id", placeSession.ID),
+                new SqlParameter("@IdPlaceSession", placeSession.Id),
                 new SqlParameter("@IdPlaces", placeSession.IdPlaces),
                 new SqlParameter("@IdSession", placeSession.IdSession),
                 new SqlParameter("@IdUsers", placeSession.IdUsers),
@@ -62,6 +65,7 @@ namespace DataAccess.Repositories.PlaceSession
                 }
             }
             reader.Close();
+
             return placeSessions;
         }
 
@@ -70,7 +74,6 @@ namespace DataAccess.Repositories.PlaceSession
             List<PlaceSessionModel> placeSessionDtos = new List<PlaceSessionModel>();
             var reader = CreateCommand("sp_GetPlaceSessionFKPlaces", new SqlConnection(connectionString),
                                         new SqlParameter("@IdPlace", idPlace)).ExecuteReader();
-
             if (reader.HasRows)
             {
                 while (reader.Read())
@@ -81,6 +84,7 @@ namespace DataAccess.Repositories.PlaceSession
                 }
             }
             reader.Close();
+
             return placeSessionDtos;
         }
 
@@ -89,26 +93,6 @@ namespace DataAccess.Repositories.PlaceSession
             List<PlaceSessionModel> placeSessionDtos = new List<PlaceSessionModel>();
             var reader = CreateCommand("sp_GetPlaceSessionFKSession", new SqlConnection(connectionString),
                                         new SqlParameter("@IdSession", idSession)).ExecuteReader();
-
-            if (reader.HasRows)
-            {
-                while (reader.Read())
-                {
-                    placeSessionDtos.Add(new PlaceSessionModel(reader.GetInt64(0), reader.GetInt64(1),
-                                                                 reader.GetInt64(2), reader.GetInt64(3), reader.GetDateTime(4), 
-                                                                 (StatePlace)reader.GetInt32(5)));
-                }
-            }
-            reader.Close();
-            return placeSessionDtos;
-        }
-
-        public List<PlaceSessionModel> GetPlaceSessionFKUser(long idUser)
-        {
-            List<PlaceSessionModel> placeSessionDtos = new List<PlaceSessionModel>();
-            var reader = CreateCommand("sp_GetPlaceSessionFKUser", new SqlConnection(connectionString),
-                                        new SqlParameter("@IdUser", idUser)).ExecuteReader();
-
             if (reader.HasRows)
             {
                 while (reader.Read())
@@ -119,18 +103,35 @@ namespace DataAccess.Repositories.PlaceSession
                 }
             }
             reader.Close();
+
             return placeSessionDtos;
         }
 
-        public PlaceSessionModel GetPlaceSession(long id)
+        public List<PlaceSessionModel> GetPlaceSessionFKUser(long idUser)
+        {
+            List<PlaceSessionModel> placeSessionDtos = new List<PlaceSessionModel>();
+            var reader = CreateCommand("sp_GetPlaceSessionFKUser", new SqlConnection(connectionString),
+                                        new SqlParameter("@IdUser", idUser)).ExecuteReader();
+            if (reader.HasRows)
+            {
+                while (reader.Read())
+                {
+                    placeSessionDtos.Add(new PlaceSessionModel(reader.GetInt64(0), reader.GetInt64(1),
+                                                                 reader.GetInt64(2), reader.GetInt64(3), reader.GetDateTime(4),
+                                                                 (StatePlace)reader.GetInt32(5)));
+                }
+            }
+            reader.Close();
+
+            return placeSessionDtos;
+        }
+
+        public PlaceSessionModel GetPlaceSession(long idPlaceSession)
         {
             PlaceSessionModel result = null;
-
-            SqlParameter parameter = new SqlParameter("@IdPlaceSession", id);
-
             var reader = CreateCommand("sp_GetPlaceSession",
                                        new SqlConnection(connectionString),
-                                       parameter).ExecuteReader();
+                                       new SqlParameter("@IdPlaceSession", idPlaceSession)).ExecuteReader();
             if (reader.HasRows)
             {
                 while (reader.Read())
@@ -141,26 +142,8 @@ namespace DataAccess.Repositories.PlaceSession
                 }
             }
             reader.Close();
+
             return result;
         }
-
-        public void DeleteIdPlaceFromPlaceSession(long idPlace)
-        {
-            CreateCommand("sp_DeleteIdPlaceFromPlaceSession", new SqlConnection(connectionString),
-                          new SqlParameter("@IdPlace", idPlace)).ExecuteScalar();
-        }
-
-        public void DeleteIdSessionFromPlaceSession(long idSession)
-        {
-            CreateCommand("sp_DeleteIdSessionFromPlaceSession", new SqlConnection(connectionString),
-                          new SqlParameter("@IdSession", idSession)).ExecuteScalar();
-        }
-
-        public void DeleteIdUserFromPlaceSession(long idUser)
-        {
-            CreateCommand("sp_DeleteIdUserFromPlaceSession", new SqlConnection(connectionString),
-                          new SqlParameter("@IdUser", idUser)).ExecuteScalar();
-        }
-
     }
 }

@@ -1,5 +1,4 @@
-﻿
-namespace DataAccess.Models
+﻿namespace DataAccess.Models
 {
     public class RowModel
     {
@@ -16,19 +15,10 @@ namespace DataAccess.Models
             this.idArea = idArea;
         }
 
-        public long Id
-        {
-            get { return id; }
-        }
+        public long Id { get { return id; } }
 
-        public long NumberRow
-        {
-            get { return numberRow; }
-        }
+        public long NumberRow { get { return numberRow; } }
 
-        public long IdArea
-        {
-            get { return idArea; }
-        }
+        public long IdArea { get { return idArea; } }
     }
 }

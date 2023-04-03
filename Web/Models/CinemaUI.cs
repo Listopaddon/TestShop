@@ -1,7 +1,4 @@
-﻿
-using System.Data;
-
-namespace Web.Models
+﻿namespace Web.Models
 {
     public class CinemaUI
     {
@@ -25,16 +22,12 @@ namespace Web.Models
             this.picture = picture;
         }
 
-        public long Id
-        { get { return id; } }
+        public long Id { get { return id; } }
 
-        public string Name
-        { get { return name; } }
+        public string Name { get { return name; } }
 
-        public string Picture
-        { get { return picture; } }
+        public string Picture { get { return picture; } }
 
-        public long IdSession
-        { get { return idSession; } }
+        public long IdSession { get { return idSession; } }
     }
 }

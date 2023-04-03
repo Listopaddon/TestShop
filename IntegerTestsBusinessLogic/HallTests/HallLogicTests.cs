@@ -1,4 +1,5 @@
 ﻿using BusinessLogic.LogicBusiness.Area;
+using BusinessLogic.LogicBusiness.Cinema;
 using BusinessLogic.LogicBusiness.Hall;
 using BusinessLogic.LogicBusiness.Place;
 using BusinessLogic.LogicBusiness.PlaceSession;
@@ -7,6 +8,7 @@ using BusinessLogic.LogicBusiness.Session;
 using DataAccess.Models;
 using DataAccess.Repositories;
 using DataAccess.Repositories.Area;
+using DataAccess.Repositories.Cinema;
 using DataAccess.Repositories.Hall;
 using DataAccess.Repositories.Place;
 using DataAccess.Repositories.PlaceSession;
@@ -21,6 +23,7 @@ namespace IntegerTestsBusinessLogic.Hall
     public class HallLogicTests
     {
         HallLogic hallLogic;
+        CinemaLogic cinemaLogic;
         string connectionString = ConnectionString.connectionStringFake;
 
         [TestInitialize]
@@ -33,6 +36,7 @@ namespace IntegerTestsBusinessLogic.Hall
                                                                          new PlaceSessionLogic(new PlaceSessionRepository(connectionString))))),
                                       new SessionLogic(new SessionRepository(connectionString),
                                                        new PlaceSessionLogic(new PlaceSessionRepository(connectionString))));
+            cinemaLogic = new CinemaLogic(new CinemaRepository(connectionString), hallLogic);
         }
 
         [TestMethod]
@@ -118,7 +122,7 @@ namespace IntegerTestsBusinessLogic.Hall
                 new HallModel(1,1)
             };
 
-            List<HallModel> result = hallLogic.GetHallByIdMovie(1);
+            List<HallModel> result = hallLogic.GetHallByIdMovie(1,1);
 
             for (int i = 0; i < result.Count; i++)
             {

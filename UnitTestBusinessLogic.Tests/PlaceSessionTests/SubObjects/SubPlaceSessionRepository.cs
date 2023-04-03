@@ -61,7 +61,7 @@ namespace UnitTestBusinessLogic.Tests.PlaceSessionTests
         {
             for (int i = 0; i < placeSessions.Count; i++)
             {
-                if (placeSessions[i].ID == id)
+                if (placeSessions[i].Id == id)
                 {
                     placeSessions.Remove(placeSessions[i]);
                     break;
@@ -75,7 +75,7 @@ namespace UnitTestBusinessLogic.Tests.PlaceSessionTests
 
             for (int i = 0; i < placeSessions.Count; i++)
             {
-                if (placeSessions[i].ID == id)
+                if (placeSessions[i].Id == id)
                 {
                     result = placeSessions[i];
                 }
@@ -136,7 +136,7 @@ namespace UnitTestBusinessLogic.Tests.PlaceSessionTests
         {
             for (int i = 0; i < placeSessions.Count; i++)
             {
-                if (placeSessions[i].ID == placeSession.ID)
+                if (placeSessions[i].Id == placeSession.Id)
                 {
                     placeSessions[i] = placeSession;
                 }

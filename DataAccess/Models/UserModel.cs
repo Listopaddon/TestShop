@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DataAccess.Models
+﻿namespace DataAccess.Models
 {
     public class UserModel
     {
@@ -21,22 +15,14 @@ namespace DataAccess.Models
             this.role = role;
         }
 
-        public long ID
-        { get { return id; } }
+        public long Id { get { return id; } }
 
-        public string Login
-        { get { return login; } }
+        public string Login { get { return login; } }
 
-        public string Password
-        { get { return password; } }
+        public string Password { get { return password; } }
 
-        public string Role
-        { get { return role; } }
+        public string Role { get { return role; } }
 
-        public void ClearPassword()
-        {
-            password = string.Empty;
-        }
-
+        public void ClearPassword() => password = string.Empty;
     }
 }

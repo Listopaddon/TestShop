@@ -1,8 +1,9 @@
 ﻿using AutoMapper;
 using BusinessLogic.LogicBusiness.Area;
 using DataAccess.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using Web.Models;
 
@@ -19,13 +20,45 @@ namespace Web.Controllers
             this.mapper = mapper;
         }
 
+        [HttpGet]
         [Route("Area/GetAreasByIdHall/{idHall}")]
         public IActionResult GetAreasByIdHall(long idHall)
         {
+            HttpContext.Session.SetString("idHallByAddArea", idHall.ToString());
             List<AreaModel> areas = areaLogic.GetFKHall(idHall);
             var areasUI = mapper.Map<List<AreaUI>>(areas);
 
             return View(areasUI);
+        }
+
+        [HttpGet]
+        public IActionResult AddArea() => View();
+
+        [HttpPost]
+        public IActionResult AddArea(int quantityRows, int quantityPlacesInRow)
+        {
+            long idHall = Convert.ToInt64(HttpContext.Session.GetString("idHallByAddArea"));
+            areaLogic.AddArea(idHall, quantityRows, quantityPlacesInRow);
+
+            return RedirectToAction("GetAreasByIdHall", "Area", new { idHall = idHall });  
+        }
+
+        [HttpGet]
+        public IActionResult ReturnToHall()
+        {
+            long idHall = Convert.ToInt64(HttpContext.Session.GetString("idHallByAddArea"));
+
+            return RedirectToAction("GetAreasByIdHall", "Area", new { idHall = idHall });
+        }
+
+        [HttpGet]
+        [Route("Area/DeleteArea/{idArea}")]
+        public IActionResult DeleteArea(long idArea)
+        {
+            areaLogic.DeleteArea(idArea);
+
+            HttpContext.Request.Headers.TryGetValue("Referer", out var headerValue);
+            return Redirect(headerValue[0]);
         }
     }
 }

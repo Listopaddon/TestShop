@@ -1,10 +1,11 @@
-﻿@model Web.Models.MovieUI
+﻿@using Microsoft.AspNetCore.Http
+@model Web.Models.MovieUI
 
 @{
     ViewData["Title"] = "AddNewMovie";
 }
 
-<h1>AddNewMovie</h1>
+<h1>Enter New Movie</h1>
 
 <h4>MovieUI</h4>
 <hr />
@@ -35,6 +36,6 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-controller="Movie" asp-action="GetOnlyMovieWithoutSession" asp-route-id="@Context.Session.GetString("idHall")">Back to movies</a>
 </div>
 

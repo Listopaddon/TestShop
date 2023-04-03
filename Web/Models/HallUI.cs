@@ -11,10 +11,8 @@
             this.idCinema = idCinema;
         }
 
-        public long Id
-        { get { return id; } }
+        public long Id { get { return id; } }
 
-        public long IdCinema
-        { get { return idCinema; } }
+        public long IdCinema { get { return idCinema; } }
     }
 }

@@ -16,10 +16,17 @@ namespace BusinessLogic.LogicBusiness.Row
             this.placeLogic = placeLogic;
         }
 
-        public long AddRow(long numberRow, long idArea)
-        {
-            return rowRepository.AddRow(numberRow, idArea);
-        }
+        public long AddRow(long numberRow, long idArea) => rowRepository.AddRow(numberRow, idArea);
+
+        public void DeleteRow(long idRow) => rowRepository.DeleteRow(idRow);
+
+        public List<RowModel> GetAreaFromRow(long idArea) => rowRepository.GetAreaFromRow(idArea);
+
+        public RowModel GetRow(long idRow) => rowRepository.GetRow(idRow);
+
+        public List<RowModel> GetRows() => rowRepository.GetRows();
+
+        public void UpdateRow(RowModel row) => rowRepository.UpdateRow(row);
 
         public void DeleteFkAreas(long idArea)
         {
@@ -33,31 +40,6 @@ namespace BusinessLogic.LogicBusiness.Row
             {
                 rowRepository.DeleteFkAreas(rows[i].IdArea);
             }
-        }
-
-        public void DeleteRow(long id)
-        {
-            rowRepository.DeleteRow(id);
-        }
-
-        public List<RowModel> GetAreaFromRow(long idArea)
-        {
-            return rowRepository.GetAreaFromRow(idArea);
-        }             
-
-        public RowModel GetRow(long id)
-        {
-            return rowRepository.GetRow(id);
-        }
-
-        public List<RowModel> GetRows()
-        {
-            return rowRepository.GetRows();
-        }
-
-        public void UpdateRow(RowModel row)
-        {
-            rowRepository.UpdateRow(row);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using DataAccess.Models;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 
@@ -8,10 +9,7 @@ namespace DataAccess.Repositories.Cinema
     {
         string connectionString;
 
-        public CinemaRepository(string connectionString)
-        {
-            this.connectionString = connectionString;
-        }
+        public CinemaRepository(string connectionString) => this.connectionString = connectionString;
 
         public long AddCinema(string name, string picture)
         {
@@ -21,7 +19,7 @@ namespace DataAccess.Repositories.Cinema
                 new SqlParameter("@Picture", picture)
             };
 
-            return (long)CreateCommand("sp_InsertCinema", new SqlConnection(connectionString), parameters).ExecuteScalar();
+            return Convert.ToInt64(CreateCommand("sp_InsertCinema", new SqlConnection(connectionString), parameters).ExecuteScalar());
         }
 
         public List<CinemaModel> GetCinemas()
@@ -37,31 +35,27 @@ namespace DataAccess.Repositories.Cinema
                 }
             }
             reader.Close();
+
             return cinemas;
         }
 
-        public void DeleteCinema(long id)
-        {
-            SqlParameter parameter = new SqlParameter("@Id", id);
-
-            CreateCommand("sp_DeleteCinema", new SqlConnection(connectionString), parameter).ExecuteScalar();
-        }
+        public void DeleteCinema(long idCinema) =>
+            CreateCommand("sp_DeleteCinema", new SqlConnection(connectionString), new SqlParameter("@IdCinema", idCinema)).ExecuteScalar();
 
         public void UpdateCinema(CinemaModel cinema)
         {
             SqlParameter[] parameters = new SqlParameter[]
             {
-                new SqlParameter("@Id", cinema.Id),
+                new SqlParameter("@IdCinema", cinema.Id),
                 new SqlParameter("@Name", cinema.Name),
                 new SqlParameter("@Picture", cinema.Picture)
             };
-
             CreateCommand("sp_UpdateCinema", new SqlConnection(connectionString), parameters).ExecuteScalar();
         }
 
-        public CinemaModel GetCinema(long id)
+        public CinemaModel GetCinema(long idCinema)
         {
-            SqlParameter parameter = new SqlParameter("IdCinema", id);
+            SqlParameter parameter = new SqlParameter("@IdCinema", idCinema);
             var reader = CreateCommand("sp_GetCinema", new SqlConnection(connectionString), parameter).ExecuteReader();
             CinemaModel result = null;
 
@@ -73,6 +67,7 @@ namespace DataAccess.Repositories.Cinema
                 }
             }
             reader.Close();
+
             return result;
         }
 

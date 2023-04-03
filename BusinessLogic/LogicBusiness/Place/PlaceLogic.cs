@@ -16,31 +16,20 @@ namespace BusinessLogic.LogicBusiness.Place
             this.placeSessionLogic = placeSessionLogic;
         }
 
-        public long AddPlace(long idRow, int numberPlace)
-        {
-            return placeRepository.AddPlace(idRow, numberPlace);
-        }
-        public void DeletePlace(long id)
-        {
-            placeRepository.DeletePlace(id);
-        }
-        public void UpdatePlace(PlaceModel place)
-        {
-            placeRepository.UpdatePlace(place);
-        }
-        public List<PlaceModel> GetPlaces()
-        {
-            return placeRepository.GetPlaces();
-        }
-        public List<PlaceModel> GetFkRow(long idRow)
-        {
-            return placeRepository.GetFkRow(idRow);
-        }
-        public PlaceModel GetPlace(long id)
-        {
-            return placeRepository.GetPlace(id);
-        }
+        public long AddPlace(long idRow, int numberPlace) => placeRepository.AddPlace(idRow, numberPlace);
+
+        public void DeletePlace(long idPlace) => placeRepository.DeletePlace(idPlace);
+
+        public void UpdatePlace(PlaceModel place) => placeRepository.UpdatePlace(place);
+
+        public List<PlaceModel> GetPlaces() => placeRepository.GetPlaces();
+
+        public List<PlaceModel> GetFkRow(long idRow) => placeRepository.GetFkRow(idRow);
+
+        public PlaceModel GetPlace(long idPlace) => placeRepository.GetPlace(idPlace);
+
         public void DeleteIdRowFromPlace(long idRow)
+
         {
             List<PlaceModel> places = placeRepository.GetFkRow(idRow);
 
@@ -55,6 +44,7 @@ namespace BusinessLogic.LogicBusiness.Place
             }
 
         }
+
         public List<PlaceModel> GetPlacesBySession(long idRow, long idSession)
         {
             List<PlaceSessionModel> placeSessions = placeSessionLogic.GetPlaceSessionFKSession(idSession);

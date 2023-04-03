@@ -7,9 +7,9 @@ namespace BusinessLogic.LogicBusiness.User
     {
         public long AddUser(string login, string password, string role);
         public void UpdateUser(UserModel user);
-        public void DeleteUser(long id);
+        public void DeleteUser(long idUser);
         public List<UserModel> GetUsers();
-        public UserModel GetUser(long id);
+        public UserModel GetUser(long idUser);
         public UserModel GetUserLogin(string login);
         public bool IsValidLogin(string login);
         public void Registration(string login, string password);

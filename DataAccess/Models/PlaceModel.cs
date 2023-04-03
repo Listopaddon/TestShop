@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace DataAccess.Models
+﻿namespace DataAccess.Models
 {
     public class PlaceModel
     {
@@ -20,21 +14,14 @@ namespace DataAccess.Models
             this.numberPlace = numberPlace;
         }
 
-        public long Id
-        { get { return id; } }
+        public long Id { get { return id; } }
 
-        public long IdRow
-        { get { return idRow; } }
+        public long IdRow { get { return idRow; } }
 
-        public int NumberPlace
-        { get { return numberPlace; } }
+        public int NumberPlace { get { return numberPlace; } }
 
-        public PlaceSessionModel PlaceSession
-        { get { return placeSession; } }
+        public PlaceSessionModel PlaceSession { get { return placeSession; } }
 
-        public void SetPlaceSession(PlaceSessionModel placeSession)
-        {
-            this.placeSession = placeSession;
-        }
+        public void SetPlaceSession(PlaceSessionModel placeSession) => this.placeSession = placeSession;
     }
 }

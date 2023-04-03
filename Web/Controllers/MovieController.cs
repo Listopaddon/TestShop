@@ -4,7 +4,6 @@ using BusinessLogic.LogicBusiness.Session;
 using DataAccess.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using Web.Models;
@@ -59,6 +58,31 @@ namespace Web.Controllers
             return Redirect(HttpContext.Session.GetString("redirectURL"));
         }
 
+        [HttpGet]
+        [Route("Movie/EditMovie/{idMovie}")]
+        public IActionResult EditMovie(long idMovie)
+        {
+            HttpContext.Session.SetString("idMovieByEdit", idMovie.ToString());
+            MovieModel movie = movieLogic.GetMovie(idMovie);
+            MovieUI movieUI = mapper.Map<MovieUI>(movie);
 
+            return View(movieUI);
+        }
+
+        [HttpPost]
+        public IActionResult EditMovie(string name, string discription, DateTime time)
+        {
+            long idMovie = Convert.ToInt64(HttpContext.Session.GetString("idMovieByEdit"));
+            movieLogic.UpdateMovie(new MovieModel(idMovie, name, discription, time));
+            return RedirectToAction("GetAllMovies", "Movie");
+        }
+
+        [HttpGet]
+        [Route ("Movie/DeleteMovie/{idMovie}")]
+        public IActionResult DeleteMovie(long idMovie)
+        {
+            movieLogic.DeleteMovie(idMovie);
+            return RedirectToAction("GetAllMovies", "Movie");
+        }
     }
 }

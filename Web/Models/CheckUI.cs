@@ -4,6 +4,7 @@ namespace Web.Models
 {
     public class CheckUI
     {
+        long idPlaceSession;
         string nameMovie;
         DateTime timeSession;
         int numberPlace;
@@ -11,9 +12,10 @@ namespace Web.Models
         string nameCinema;
         decimal price;
 
-        public CheckUI(string nameMovie, DateTime timeSession, int numberPlace,
-                       long numberRow, string nameCinema, decimal price)
+        public CheckUI(long idPlaceSession, string nameMovie, DateTime timeSession, int numberPlace,
+                      long numberRow, string nameCinema, decimal price)
         {
+            this.idPlaceSession = idPlaceSession;
             this.nameMovie = nameMovie;
             this.timeSession = timeSession;
             this.numberPlace = numberPlace;
@@ -22,6 +24,7 @@ namespace Web.Models
             this.price = price;
         }
 
+        public long IdPlaceSession { get { return idPlaceSession; } }
         public string NameMovie { get { return nameMovie; } }
         public DateTime TimeSession { get { return timeSession; } }
         public int NumberPlace { get { return numberPlace; } }

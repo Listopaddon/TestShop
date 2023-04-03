@@ -1,4 +1,5 @@
-﻿using BusinessLogic.LogicBusiness.Row;
+﻿using BusinessLogic.LogicBusiness.Place;
+using BusinessLogic.LogicBusiness.Row;
 using DataAccess.Models;
 using DataAccess.Repositories.Area;
 using System.Collections.Generic;
@@ -9,44 +10,44 @@ namespace BusinessLogic.LogicBusiness.Area
     {
         IAreaRepository areaRepository;
         IRowLogic rowLogic;
+        IPlaceLogic placeLogic;
 
-        public AreaLogic(IAreaRepository areaRepository, IRowLogic rowLogic)
+        public AreaLogic(IAreaRepository areaRepository, IRowLogic rowLogic, IPlaceLogic placeLogic)
         {
             this.areaRepository = areaRepository;
             this.rowLogic = rowLogic;
+            this.placeLogic = placeLogic;
+        }
+        public void UpdateArea(AreaModel area) => areaRepository.UpdateArea(area);
+
+        public List<AreaModel> GetAreas() => areaRepository.GetAreas();
+
+        public List<AreaModel> GetFKHall(long idHall) => areaRepository.GetFKHall(idHall);
+
+        public AreaModel GetArea(long idArea) => areaRepository.GetArea(idArea);
+
+        public long AddArea(long idHall) => areaRepository.AddArea(idHall);
+
+        public long AddArea(long idHall, int quantityRows, int quantityPlacesInRow)
+        {
+            long idArea = AddArea(idHall);
+
+            for (int i = 0; i < quantityRows; i++)
+            {
+                long idRow = rowLogic.AddRow(i + 1, idArea);
+                for (int j = 0; j < quantityPlacesInRow; j++)
+                {
+                    placeLogic.AddPlace(idRow, j + 1);
+                }
+            }
+
+            return idArea;
         }
 
-        public long AddArea(long idHall)
+        public void DeleteArea(long idArea)
         {
-            long id = areaRepository.AddArea(idHall);
-            return id;
-        }
-
-        public void DeleteArea(long id)
-        {
-            rowLogic.DeleteFkAreas(id);
-            areaRepository.DeleteArea(id);
-        }
-
-        public void UpdateArea(AreaModel area)
-        {
-            areaRepository.UpdateArea(area);
-        }
-
-        public List<AreaModel> GetAreas()
-        {
-            return areaRepository.GetAreas();
-        }
-
-        public List<AreaModel> GetFKHall(long idHall)
-        {
-            return areaRepository.GetFKHall(idHall);
-
-        }
-
-        public AreaModel GetArea(long id)
-        {
-            return areaRepository.GetArea(id);
+            rowLogic.DeleteFkAreas(idArea);
+            areaRepository.DeleteArea(idArea);
         }
 
         public void DeleteIdHallFromArea(long idHall)

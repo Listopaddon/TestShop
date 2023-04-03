@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Models
 {
@@ -21,17 +17,12 @@ namespace DataAccess.Models
             this.time = time;
         }
 
-        public long Id
-        { get { return id; } }
+        public long Id { get { return id; } }
 
-        public string Name
-        { get { return name; } }
+        public string Name { get { return name; } }
 
-        public string Discription
-        { get { return discription; } }
+        public string Discription { get { return discription; } }
 
-        public DateTime Time
-        { get { return time; } }
-        
+        public DateTime Time { get { return time; } }
     }
 }

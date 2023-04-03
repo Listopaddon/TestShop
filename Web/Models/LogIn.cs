@@ -4,14 +4,8 @@
     {
         string redirectURL;
 
-        public LogIn(string redirectURL)
-        {
-            this.redirectURL = redirectURL;
-        }
+        public LogIn(string redirectURL) => this.redirectURL = redirectURL;
 
-        public string RedirectURL
-        {
-            get { return redirectURL; }
-        }
+        public string RedirectURL { get { return redirectURL; } }
     }
 }

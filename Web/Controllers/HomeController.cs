@@ -4,8 +4,6 @@ using BusinessLogic.LogicBusiness.Movie;
 using DataAccess.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Web.Models;
@@ -25,6 +23,7 @@ namespace Web.Controllers
             this.mapper = mapper;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
             List<CinemaModel> cinemas = cLogic.GetCinemas();
@@ -32,6 +31,7 @@ namespace Web.Controllers
             return View(cinemasUI);
         }
 
+        [HttpGet]
         [Route("Home/GetAllMoviesForCinema/{idCinema}")]
         public IActionResult GetAllMoviesForCinema(long idCinema)
         {
@@ -41,15 +41,10 @@ namespace Web.Controllers
             return View(moviesUI);
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+        [HttpGet]
+        public IActionResult Privacy() => View();
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+        public IActionResult Error() => View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }

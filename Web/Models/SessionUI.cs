@@ -15,17 +15,13 @@
             this.price = price;
         }
 
-        public long Id
-        { get { return id; } }
+        public long Id { get { return id; } }
 
-        public long IdMovie
-        { get { return idMovie; } }
+        public long IdMovie { get { return idMovie; } }
 
-        public long IdHall
-        { get { return idHall; } }
+        public long IdHall { get { return idHall; } }
 
-        public decimal Price
-        { get { return price; } }
+        public decimal Price { get { return price; } }
 
     }
 }

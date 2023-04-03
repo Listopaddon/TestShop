@@ -3,7 +3,6 @@ using BusinessLogic.LogicBusiness.Cinema;
 using DataAccess.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using Web.Models;
 
@@ -26,9 +25,9 @@ namespace Web.Controllers
         {
             HttpContext.Session.SetString("idSession",idSession.ToString());
             HttpContext.Session.SetString("idMovie", idMovie.ToString());
-
             List<CinemaModel> cinemas = cinemaLogic.GetIdCinemaByFilmFromSession(idMovie);
             var cinemasUI = mapper.Map<List<CinemaUI>>(cinemas);
+
             return View(cinemasUI);
         }
 

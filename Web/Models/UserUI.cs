@@ -15,17 +15,12 @@
             this.role = role;
         }
 
-        public long ID
-        { get { return id; } }
+        public long ID { get { return id; } }
 
-        public string Login
-        { get { return login; } }
+        public string Login { get { return login; } }
 
-        public string Password
-        { get { return password; } }
+        public string Password { get { return password; } }
 
-        public string Role
-        { get { return role; } }
-
+        public string Role { get { return role; } }
     }
 }

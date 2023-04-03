@@ -1,4 +1,5 @@
-﻿using DataAccess.Models;
+﻿using BusinessLogic.LogicBusiness.Session;
+using DataAccess.Models;
 using DataAccess.Repositories.Movie;
 using System;
 using System.Collections.Generic;
@@ -8,36 +9,32 @@ namespace BusinessLogic.LogicBusiness.Movie
     public class MovieLogic : IMovieLogic
     {
         IMovieRepository movieRepository;
-        public MovieLogic(IMovieRepository movieRepository)
+        ISessionLogic sessionLogic;
+        public MovieLogic(IMovieRepository movieRepository, ISessionLogic sessionLogic)
         {
             this.movieRepository = movieRepository;
+            this.sessionLogic = sessionLogic;
         }
 
-        public long AddMovie(string name, string discription, DateTime time)
-        {
-            return movieRepository.AddMovie(name, discription, time);
-        }
-        public void DeleteMovie(long id)
-        {
-            movieRepository.DeleteMovie(id);
-        }
-        public void UpdateMovie(MovieModel movie)
-        {
-            movieRepository.UpdateMovie(movie);
-        }
-        public List <MovieModel> GetMovies()
-        {
-            return movieRepository.GetMovies();
-        }
+        public long AddMovie(string name, string discription, DateTime time) => movieRepository.AddMovie(name, discription, time);
 
-        public MovieModel GetMovie(long id)
-        {
-            return movieRepository.GetMovie(id);
-        }
+        public void UpdateMovie(MovieModel movie) => movieRepository.UpdateMovie(movie);
 
-        public List<MovieSessionModel> GetMoviesWithCinema(long idCinema)
+        public List<MovieModel> GetMovies() => movieRepository.GetMovies();
+
+        public MovieModel GetMovie(long idMovie) => movieRepository.GetMovie(idMovie);
+
+        public List<MovieSessionModel> GetMoviesWithCinema(long idCinema) => movieRepository.GetAllMovieForThisCinema(idCinema);
+
+        public void DeleteMovie(long idMovie)
         {
-            return movieRepository.GetAllMovieForThisCinema(idCinema);
+            List<SessionModel> sessions = sessionLogic.GetSessionsByMovie(idMovie);
+            for (int i = 0; i < sessions.Count; i++)
+            {
+                sessionLogic.DeleteSession(sessions[i].Id);
+            }
+
+            movieRepository.DeleteMovie(idMovie);
         }
 
     }

@@ -1,0 +1,36 @@
+﻿@using Microsoft.AspNetCore.Http
+@model Web.Models.RowUI
+
+@{
+	ViewData["Title"] = "AddRow";
+}
+
+<h1>Add row</h1>
+
+<h4>RowUI</h4>
+<hr />
+<div class="row">
+	<div class="col-md-4">
+		<form asp-action="AddRow">
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			<div class="form-group">
+				<label asp-for="NumberRow" class="control-label"></label>
+				<input asp-for="NumberRow" class="form-control" />
+				<span asp-validation-for="NumberRow" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<input type="submit" value="Create" class="btn btn-primary" />
+			</div>
+		</form>
+	</div>
+</div>
+
+<div>
+	<a asp-controller="RowAndPlace" asp-action="GetAllRowsAndPlaces" asp-route-id="@Context.Session.GetString("idAreaByRow")">Back to places</a>
+</div>
+
+@section Scripts {
+	@{
+		await Html.RenderPartialAsync("_ValidationScriptsPartial");
+	}
+	}

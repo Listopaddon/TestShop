@@ -1,4 +1,5 @@
 ﻿using DataAccess.Models;
+using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
@@ -9,10 +10,7 @@ namespace DataAccess.Repositories.User
     {
         string connectionString;
 
-        public UserRepository(string connectionString)
-        {
-            this.connectionString = connectionString;
-        }
+        public UserRepository(string connectionString) => this.connectionString = connectionString;
 
         public long AddUser(string login, string password, string role)
         {
@@ -20,23 +18,20 @@ namespace DataAccess.Repositories.User
                                                              new SqlParameter("@Password", password),
                                                              new SqlParameter("@Role", role)};
 
-            return (long)CreateCommand("sp_InsertUser", new SqlConnection(connectionString), parameters).ExecuteScalar();
+            return Convert.ToInt64(CreateCommand("sp_InsertUser", new SqlConnection(connectionString), parameters).ExecuteScalar());
         }
 
         public void UpdateUser(UserModel user)
         {
-            SqlParameter[] parameters = new SqlParameter[] {new SqlParameter("@Id", user.ID),
+            SqlParameter[] parameters = new SqlParameter[] {new SqlParameter("@IdUser", user.Id),
                                                             new SqlParameter("@Login", user.Login),
                                                             new SqlParameter("@Password", user.Password),
                                                             new SqlParameter("@Role", user.Role)};
             CreateCommand("sp_UpdateUser", new SqlConnection(connectionString), parameters).ExecuteScalar();
         }
 
-        public void DeleteUser(long id)
-        {
-            SqlParameter[] parameters = new SqlParameter[] { new SqlParameter("@Id", id) };
-            CreateCommand("sp_DeleteUser", new SqlConnection(connectionString), parameters).ExecuteScalar();
-        }
+        public void DeleteUser(long idUser) =>
+            CreateCommand("sp_DeleteUser", new SqlConnection(connectionString), new SqlParameter("@IdUser", idUser)).ExecuteScalar();
 
         public List<UserModel> GetUsers()
         {
@@ -55,11 +50,10 @@ namespace DataAccess.Repositories.User
             return users;
         }
 
-        public UserModel GetUser(long id)
+        public UserModel GetUser(long idUser)
         {
             List<UserModel> result = new List<UserModel>();
-            SqlParameter parameter = new SqlParameter("@IdUser", id);
-            var reader = CreateCommand("sp_GetUser", new SqlConnection(connectionString), parameter).ExecuteReader();
+            var reader = CreateCommand("sp_GetUser", new SqlConnection(connectionString), new SqlParameter("@IdUser", idUser)).ExecuteReader();
 
             if (reader.HasRows)
             {
@@ -76,8 +70,7 @@ namespace DataAccess.Repositories.User
         public UserModel GetUserLogin(string login)
         {
             List<UserModel> result = new List<UserModel>();
-            SqlParameter parameter = new SqlParameter("@Login", login);
-            var reader = CreateCommand("sp_GetUserLogin", new SqlConnection(connectionString), parameter).ExecuteReader();
+            var reader = CreateCommand("sp_GetUserLogin", new SqlConnection(connectionString), new SqlParameter("@Login", login)).ExecuteReader();
 
             if (reader.HasRows)
             {

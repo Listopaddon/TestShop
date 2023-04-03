@@ -12,7 +12,7 @@ namespace UnitTestBusinessLogic.Tests.PlaceSessionTests.SubObjects
     {
         public long AddPlaceSession(long idPlaces, long idSession, long idUser, StatePlace state)
         {
-            return new PlaceSessionModel().ID;
+            return new PlaceSessionModel().Id;
         }
 
         public void DeleteIdPlaceFromPlaceSession(long idPlace) { }
