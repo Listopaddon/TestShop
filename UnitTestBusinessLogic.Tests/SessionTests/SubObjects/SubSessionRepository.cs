@@ -85,14 +85,21 @@ namespace UnitTestBusinessLogic.Tests.SessionTests.SubObjects
             return null;
         }
 
-        public List<SessionModel> GetSessions()
-        {
-            return sessions;
-        }
+        public List<SessionModel> GetSessions() => sessions;
 
         public List<SessionModel> GetSessionsByMovie(long idMovie)
         {
-            throw new System.NotImplementedException();
+            List<SessionModel> sessionsResult = new List<SessionModel>();
+
+            for (int i = 0; i < sessions.Count; i++)
+            {
+                if (sessions[i].IdMovie == idMovie)
+                {
+                    sessionsResult.Add(sessions[i]);
+                }
+            }
+
+            return sessionsResult;
         }
 
         public void UpdateSession(SessionModel session)

@@ -1,13 +1,9 @@
 ﻿using BusinessLogic.LogicBusiness.Place;
-using BusinessLogic.LogicBusiness.PlaceSession;
 using DataAccess.Models;
-using DataAccess.Repositories.PlaceSession;
-using DataAccess.Repositories;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using UnitTestBusinessLogic.Tests.PlaceTests.SubObjects;
 using UnitTestBusinessLogic.Tests.PlaceSessionTests.SubObjects;
-using UnitTestBusinessLogic.Tests.PlaceSessionTests;
 
 namespace UnitTestBusinessLogic.Tests.PlaceTests
 {
@@ -33,10 +29,7 @@ namespace UnitTestBusinessLogic.Tests.PlaceTests
         }
 
         [TestMethod]
-        public void AddPlaceTest()
-        {
-            Assert.AreEqual(7, placeLogic.AddPlace(4, 54));
-        }
+        public void AddPlaceTest() => Assert.AreEqual(7, placeLogic.AddPlace(4, 54));
 
         [TestMethod]
         public void DeletePlaceTest()

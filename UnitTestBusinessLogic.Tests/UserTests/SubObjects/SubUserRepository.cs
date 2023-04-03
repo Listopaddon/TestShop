@@ -8,10 +8,7 @@ namespace UnitTestBusinessLogic.Tests.UserTests.SubObjects
     {
         List<UserModel> users;
 
-        public SubUserRepository(List<UserModel> users)
-        {
-            this.users = users;
-        }
+        public SubUserRepository(List<UserModel> users) => this.users = users;
 
         public long AddUser(string login, string password, string role)
         {
@@ -49,13 +46,20 @@ namespace UnitTestBusinessLogic.Tests.UserTests.SubObjects
 
         public UserModel GetUserLogin(string login)
         {
-            throw new System.NotImplementedException();
+            UserModel resultuser = null;
+
+            for (int i = 0; i < users.Count; i++)
+            {
+                if (users[i].Login == login)
+                {
+                    return resultuser = users[i];
+                }
+            }
+
+            return null;
         }
 
-        public List<UserModel> GetUsers()
-        {
-            return users;
-        }
+        public List<UserModel> GetUsers() => users;
 
         public void UpdateUser(UserModel user)
         {

@@ -1,15 +1,8 @@
-﻿using BusinessLogic.LogicBusiness.Movie;
-using BusinessLogic.LogicBusiness.Place;
+﻿using BusinessLogic.LogicBusiness.Place;
 using BusinessLogic.LogicBusiness.Row;
 using DataAccess.Models;
-using DataAccess.Repositories.Place;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using UnitTestBusinessLogic.Tests.MovieTests.SubObjects;
 using UnitTestBusinessLogic.Tests.PlaceSessionTests.SubObjects;
 using UnitTestBusinessLogic.Tests.PlaceTests.SubObjects;
 using UnitTestBusinessLogic.Tests.RowTests.SubObjects;
@@ -51,10 +44,7 @@ namespace UnitTestBusinessLogic.Tests.RowTests
         }
 
         [TestMethod]
-        public void AddRowTest()
-        {
-            Assert.AreEqual(6, rowLogic.AddRow(4, 2));
-        }
+        public void AddRowTest() => Assert.AreEqual(6, rowLogic.AddRow(4, 2));
 
         [TestMethod]
         public void UpdateRowTest()
@@ -154,27 +144,5 @@ namespace UnitTestBusinessLogic.Tests.RowTests
 
             Assert.AreEqual(result.Count, 0);
         }
-
-        //[TestMethod]
-        //public void GetPlacesbyRowTest()
-        //{
-        //    long id = 1;
-        //    Dictionary<Row, List<Place>> expected = new Dictionary<Row, List<Place>>();
-        //    expected.Add(new Row(0, 1, 1), new List<Place>() { null });
-        //    expected.Add(new Row(1, 2, 1), new List<Place>() { new Place(0,1,1),
-        //                                                             new Place(1,1,2),
-        //                                                             new Place(2,1,3)});
-        //    expected.Add(new Row(2, 3, 1), new List<Place>() { new Place(3,2,1),
-        //                                                             new Place(4,2,2)});
-
-        //    Dictionary<Row, List<Place>> result = rowLogic.GetPlacesbyRow(id);
-        //    ICollection<Row> keys = expected.Keys;
-        //    ICollection < List < Place >> = expected.Values;
-
-        //    for (int i = 0; i < expected.Count; i++)
-        //    {
-        //        Assert.AreEqual(expected.Ke)
-        //    }
-        //}
     }
 }

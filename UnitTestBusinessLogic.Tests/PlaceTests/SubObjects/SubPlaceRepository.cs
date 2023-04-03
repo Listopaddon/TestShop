@@ -47,10 +47,7 @@ namespace UnitTestBusinessLogic.Tests.PlaceTests.SubObjects
             return result;
         }
 
-        public List<PlaceModel> GetPlaces()
-        {
-            return places;
-        }
+        public List<PlaceModel> GetPlaces() => places;
 
         public void UpdatePlace(PlaceModel place)
         {

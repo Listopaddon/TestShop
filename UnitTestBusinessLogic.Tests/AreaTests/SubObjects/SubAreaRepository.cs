@@ -60,10 +60,7 @@ namespace UnitTestBusinessLogic.Tests
             return area;
         }
 
-        public List<AreaModel> GetAreas()
-        {
-            return areas;
-        }
+        public List<AreaModel> GetAreas() => areas;
 
         public List<AreaModel> GetFKHall(long idHall)
         {

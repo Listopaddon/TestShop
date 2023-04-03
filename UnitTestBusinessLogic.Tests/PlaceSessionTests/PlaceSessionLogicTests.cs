@@ -28,10 +28,7 @@ namespace UnitTestBusinessLogic.Tests.PlaceSessionTests
         }
 
         [TestMethod]
-        public void AddPlaceSessionTest()
-        {
-            Assert.AreEqual(6, placeSessionLogic.AddPlaceSession(1, 1, 1, StatePlace.Buy));
-        }
+        public void AddPlaceSessionTest() => Assert.AreEqual(6, placeSessionLogic.AddPlaceSession(1, 1, 1, StatePlace.Buy));
 
         [TestMethod]
         public void DeletePlaceSessionTest()

@@ -40,10 +40,7 @@ namespace UnitTestBusinessLogic.Tests.UserTests
 
 
         [TestMethod]
-        public void AddUserTest()
-        {
-            Assert.AreEqual(5, userLogic.AddUser("NewUser", "Password123", "User"));
-        }
+        public void AddUserTest() => Assert.AreEqual(5, userLogic.AddUser("NewUser", "Password123", "User"));
 
         [TestMethod]
         public void DeleteUserTest()

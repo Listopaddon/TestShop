@@ -61,10 +61,7 @@ namespace UnitTestBusinessLogic.Tests.CinemaTests
             return result;
         }
 
-        public List<CinemaModel> GetCinemas()
-        {
-            return cinemas;
-        }
+        public List<CinemaModel> GetCinemas() => cinemas;
 
         public List<CinemaModel> GetIdCinemaByFilmFromSession(long idMovie)
         {

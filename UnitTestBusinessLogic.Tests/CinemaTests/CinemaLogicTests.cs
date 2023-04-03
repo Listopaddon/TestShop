@@ -29,10 +29,7 @@ namespace UnitTestBusinessLogic.Tests.CinemaTests
         }
 
         [TestMethod]
-        public void AddCinemaTest()
-        {
-            Assert.AreEqual(6, cinemaLogic.AddCinema("Lemontov", "pic"));
-        }
+        public void AddCinemaTest() => Assert.AreEqual(6, cinemaLogic.AddCinema("Lemontov", "pic"));
 
         [TestMethod]
         public void DeleteCinemaTest()

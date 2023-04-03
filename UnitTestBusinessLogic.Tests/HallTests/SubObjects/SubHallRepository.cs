@@ -82,30 +82,25 @@ namespace UnitTestBusinessLogic.Tests.HallTests.SubObjects
             return result;
         }
 
-        public List<HallModel> GetHallByIdMovie(long idmovie)
-        {
-            List<HallModel> resultHall = new List<HallModel>();
-            for (int i = 0; i < sessions.Count; i++)
-            {
-                if (sessions[i].IdMovie == idmovie)
-                {
-                    resultHall.Add(GetHall(sessions[i].IdHall));
-                    break;
-                }
-            }
-
-            return resultHall;
-        }
-
         public List<HallModel> GetHallByIdMovie(long idMovie, long idCinema)
         {
-            throw new System.NotImplementedException();
+            List<HallModel> result = new List<HallModel>();
+
+            for (int i = 0; i < halls.Count; i++)
+            {
+                for(int j=0;j<sessions.Count;j++)
+                {
+                    if (idCinema == halls[i].IdCinema && sessions[j].IdHall == halls[i].Id && sessions[j].IdMovie == idMovie)
+                    {
+                        result.Add(halls[i]);
+                    }
+                }                
+            }
+
+            return result;
         }
 
-        public List<HallModel> GetHalls()
-        {
-            return halls;
-        }
+        public List<HallModel> GetHalls() => halls;
 
         public void UpdateHall(HallModel hall)
         {

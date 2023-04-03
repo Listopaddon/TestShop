@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using UnitTestBusinessLogic.Tests.MovieTests.SubObjects;
+using UnitTestBusinessLogic.Tests.SessionTests.SubObjects;
 
 namespace UnitTestBusinessLogic.Tests.MovieTests
 {
@@ -27,7 +28,7 @@ namespace UnitTestBusinessLogic.Tests.MovieTests
                 new MovieModel(7,"Bad Boys", "Cool film",new DateTime(20,00))
             };
 
-            movieLogic = new MovieLogic(new SubMovieRepository(movies),null);  //поменять null на sessionRepository!!!
+            movieLogic = new MovieLogic(new SubMovieRepository(movies), new SubSessionLogic());  //поменять null на sessionRepository!!!
         }
 
         [TestMethod]

@@ -1,10 +1,6 @@
 ﻿using DataAccess.Models;
 using DataAccess.Repositories.Row;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace UnitTestBusinessLogic.Tests.RowTests.SubObjects
 {
@@ -14,7 +10,7 @@ namespace UnitTestBusinessLogic.Tests.RowTests.SubObjects
 
         public SubRowRepository(List<RowModel> rows)
         {
-            this.rows = rows;           
+            this.rows = rows;
         }
         public long AddRow(long numberRow, long idArea)
         {
@@ -75,10 +71,7 @@ namespace UnitTestBusinessLogic.Tests.RowTests.SubObjects
             return null;
         }
 
-        public List<RowModel> GetRows()
-        {
-            return rows;
-        }
+        public List<RowModel> GetRows() => rows;
 
         public void UpdateRow(RowModel row)
         {

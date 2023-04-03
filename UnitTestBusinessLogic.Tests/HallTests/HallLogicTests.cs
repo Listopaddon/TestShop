@@ -30,10 +30,7 @@ namespace UnitTestBusinessLogic.Tests.HallTests
                                   new SubSessionLogic());
         }
         [TestMethod]
-        public void AddHallTest()
-        {
-            Assert.AreEqual(6, logic.AddHall(64));
-        }
+        public void AddHallTest() => Assert.AreEqual(6, logic.AddHall(64));
 
         [TestMethod]
         public void DeleteHallTest()
@@ -118,19 +115,19 @@ namespace UnitTestBusinessLogic.Tests.HallTests
             Assert.AreEqual(expected.IdCinema, halls[3].IdCinema);
         }
 
-        //[TestMethod]
-        //public void GetHallByIdMovieTest()
-        //{
-        //    List<HallModel> expected = new List<HallModel>()
-        //    { new HallModel(1, 1) };
-        //    List<HallModel> result = logic.GetHallByIdMovie(1);
+        [TestMethod]
+        public void GetHallByIdMovieTest()
+        {
+            List<HallModel> expected = new List<HallModel>()
+            { new HallModel(1, 1) };
+            List<HallModel> result = logic.GetHallByIdMovie(1,1);
 
-        //    for(int i=0;i<result.Count;i++)
-        //    {
-        //        Assert.AreEqual(expected[i].Id, result[i].Id);
-        //        Assert.AreEqual(expected[i].IdCinema, result[i].IdCinema);
-        //    }           
-        //}
+            for (int i = 0; i < result.Count; i++)
+            {
+                Assert.AreEqual(expected[i].Id, result[i].Id);
+                Assert.AreEqual(expected[i].IdCinema, result[i].IdCinema);
+            }
+        }
 
         [TestMethod]
         public void GetHallByIdCinemaTest()

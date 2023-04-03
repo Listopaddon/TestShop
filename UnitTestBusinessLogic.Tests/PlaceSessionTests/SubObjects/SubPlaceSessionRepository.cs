@@ -17,7 +17,7 @@ namespace UnitTestBusinessLogic.Tests.PlaceSessionTests
         public long AddPlaceSession(long idPlaces, long idSession, long idUser, StatePlace state, DateTime dateTime)
         {
             long id = placeSessions.Count;
-            placeSessions.Add(new PlaceSessionModel(id, idPlaces, idSession, idUser,dateTime,state));
+            placeSessions.Add(new PlaceSessionModel(id, idPlaces, idSession, idUser, dateTime, state));
             return id;
         }
 
@@ -127,10 +127,7 @@ namespace UnitTestBusinessLogic.Tests.PlaceSessionTests
             return result;
         }
 
-        public List<PlaceSessionModel> GetPlaceSessions()
-        {
-            return placeSessions;
-        }
+        public List<PlaceSessionModel> GetPlaceSessions() => placeSessions;
 
         public void UpdatePlaceSession(PlaceSessionModel placeSession)
         {
