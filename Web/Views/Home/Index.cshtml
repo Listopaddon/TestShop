@@ -1,29 +1,63 @@
-﻿@model IEnumerable<CinemaUI>
+﻿@using Microsoft.AspNetCore.Http
+@model IEnumerable<CinemaUI>
 
 @{
 	ViewData["Title"] = "Index";
 }
 
-<table class="table">
-	<thead>
-		<h1>All cinemas in your city</h1>
+@if (Context.Session.GetString("loginUser") == "Admin")
+{
+	<p>
+		<a asp-controller="Cinema" asp-action="AddCinema">Add new cinema</a>
+	</p>
+	<table class="table">
+		<thead>
+			<h1>All cinemas in your city</h1>
+		</thead>
+		<tbody>
+			@foreach (var item in Model)
+			{
+				<tr>
+					<td>
+						<h2>@Html.DisplayFor(modelItem => item.Name)</h2>
+					</td>
+					<td>
+						<img src="@Html.DisplayFor(modelItem => item.Picture)" width="200" height="200">
+					</td>
+					@Html.HiddenFor(modelItem => item.Id)
+					<td>
+						@Html.ActionLink("All films in this cinema", "GetAllMoviesForCinema", new {  id=item.Id  }) <br>
+						@Html.ActionLink("Delete cinema", "DeleteCinema","Cinema", new {id = item.Id})<br>
+						@Html.ActionLink("Edit cinema","EditCinema","Cinema", new {id = item.Id})
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+else
+{
+	<table class="table">
+		<thead>
+			<h1>All cinemas in your city</h1>
+		</thead>
+		<tbody>
+			@foreach (var item in Model)
+			{
+				<tr>
+					<td>
+						<h2>@Html.DisplayFor(modelItem => item.Name)</h2>
+					</td>
+					<td>
+						<img src="@Html.DisplayFor(modelItem => item.Picture)" width="200" height="200">
+					</td>
+					@Html.HiddenFor(modelItem => item.Id)
+					<td>
+						@Html.ActionLink("All films in this cinema", "GetAllMoviesForCinema", new {  id=item.Id  })
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
 
-	</thead>
-	<tbody>
-		@foreach (var item in Model)
-		{
-			<tr>
-				<td>
-					<h1>Name</h1>
-				</td>
-				<td>
-					<img src="@Html.DisplayFor(modelItem => item.Picture)" width="200" height="200">
-				</td>
-				@Html.HiddenFor(modelItem => item.Id)
-				<td>
-					@Html.ActionLink("All films in this cinema", "GetAllMoviesForCinema", new {  id=item.Id  })
-				</td>
-			</tr>
-		}
-	</tbody>
-</table>

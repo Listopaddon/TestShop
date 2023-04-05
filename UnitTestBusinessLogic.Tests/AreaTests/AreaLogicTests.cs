@@ -34,11 +34,13 @@ namespace UnitTestBusinessLogic.Tests
         [TestMethod]
         public void DeleteAreaTest()
         {
+            //Arrange
             long id = 5;
             AreaModel result = null;
             List<AreaModel> areaDtos = areaLogic.GetAreas();
-            areaLogic.DeleteArea(id);
 
+            //Act
+            areaLogic.DeleteArea(id);
             for (int i = 0; i < areaDtos.Count; i++)
             {
                 if (areaDtos[i].Id == id)
@@ -48,17 +50,20 @@ namespace UnitTestBusinessLogic.Tests
                 }
             }
 
+            //Assert
             Assert.IsNull(result);
         }
 
         [TestMethod]
         public void DeleteIdHallFromAreaTest()
         {
+            //Arrange
             long id = 3;
             List<AreaModel> areaDtosResult = new List<AreaModel>();
             List<AreaModel> areaDtos = areaLogic.GetAreas();
-            areaLogic.DeleteIdHallFromArea(id);
 
+            //Act
+            areaLogic.DeleteIdHallFromArea(id);
             for (int i = 0; i < areaDtos.Count; i++)
             {
                 if (areaDtos[0].IdHall == 4)
@@ -71,12 +76,14 @@ namespace UnitTestBusinessLogic.Tests
                 }
             }
 
+            //Assert
             Assert.AreEqual(areaDtosResult.Count, 0);
         }
 
         [TestMethod]
         public void GetAreasTest()
         {
+            //Arrange
             List<AreaModel> expected = new List<AreaModel>
             {
                  new AreaModel(0, 1),
@@ -87,8 +94,10 @@ namespace UnitTestBusinessLogic.Tests
                  new AreaModel(5, 3)
             };
 
+            //Act
             List<AreaModel> result = areaLogic.GetAreas();
 
+            //Assert
             for (int i = 0; i < expected.Count; i++)
             {
                 Assert.AreEqual(expected[0].Id, result[0].Id);
@@ -99,10 +108,14 @@ namespace UnitTestBusinessLogic.Tests
         [TestMethod]
         public void UpdateAreaTest()
         {
+            //Arrange
             List<AreaModel> areas = areaLogic.GetAreas();
             AreaModel expected = new AreaModel(3, 14);
+
+            //Act
             areaLogic.UpdateArea(new AreaModel(3, 14));
 
+            //Assert
             Assert.AreEqual(expected.Id, areas[3].Id);
             Assert.AreEqual(expected.IdHall, areas[3].IdHall);
 
@@ -111,9 +124,13 @@ namespace UnitTestBusinessLogic.Tests
         [TestMethod]
         public void GetAreaTest()
         {
+            //Arrange
             AreaModel expected = new AreaModel(3, 2);
+
+            //Act
             AreaModel result = areaLogic.GetArea(3);
 
+            //Assert
             Assert.AreEqual(expected.Id, result.Id);
             Assert.AreEqual(result.IdHall, result.IdHall);
         }
@@ -121,14 +138,17 @@ namespace UnitTestBusinessLogic.Tests
         [TestMethod]
         public void GetFKHall()
         {
+            //Arrange
             List<AreaModel> expected = new List<AreaModel>
             {
                   new AreaModel(1, 2),
                   new AreaModel(3, 2)
             };
 
+            //Act
             List<AreaModel> result = areaLogic.GetFKHall(2);
 
+            //Assert
             for (int i = 0; i < expected.Count; i++)
             {
                 Assert.AreEqual(expected[i].Id, result[i].Id);

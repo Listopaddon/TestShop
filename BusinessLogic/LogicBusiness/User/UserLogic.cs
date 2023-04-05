@@ -1,4 +1,5 @@
-﻿using DataAccess.Models;
+﻿using BusinessLogic.LogicBusiness.PlaceSession;
+using DataAccess.Models;
 using DataAccess.Repositories.User;
 using System.Collections.Generic;
 
@@ -7,9 +8,11 @@ namespace BusinessLogic.LogicBusiness.User
     public class UserLogic : IUserLogic
     {
         IUserRepository userRepository;
+        IPlaceSessionLogic placeSessionLogic;
 
-        public UserLogic(IUserRepository userRepository)
+        public UserLogic(IUserRepository userRepository, IPlaceSessionLogic placeSessionLogic)
         {
+            this.placeSessionLogic = placeSessionLogic;
             this.userRepository = userRepository;
         }
 
@@ -17,7 +20,11 @@ namespace BusinessLogic.LogicBusiness.User
 
         public void UpdateUser(UserModel user) => userRepository.UpdateUser(user);
 
-        public void DeleteUser(long idUser) => userRepository.DeleteUser(idUser);
+        public void DeleteUser(long idUser)
+        {
+            placeSessionLogic.DeleteIdUserFromPlaceSession(idUser);
+            userRepository.DeleteUser(idUser);
+        }
 
         public List<UserModel> GetUsers() => userRepository.GetUsers();
 

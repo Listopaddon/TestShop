@@ -44,6 +44,19 @@ namespace Web.Controllers
         }
 
         [HttpGet]
+        public IActionResult AddAreaByHall() => View();
+
+        [HttpPost]
+        [Route ("Area/AddAreaByHall/{idHall}")]
+        public IActionResult AddAreaByHall(int quantityRows, int quantityPlacesInRow,long idHall)
+        {
+            areaLogic.AddArea(idHall, quantityRows, quantityPlacesInRow);
+            long idCinema = Convert.ToInt64(HttpContext.Session.GetString("idCinemaByAllHalls"));
+
+            return RedirectToAction("GetHallsByCinema", "Hall", new { idCinema = idCinema });
+        }
+
+        [HttpGet]
         public IActionResult ReturnToHall()
         {
             long idHall = Convert.ToInt64(HttpContext.Session.GetString("idHallByAddArea"));

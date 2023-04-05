@@ -1,10 +1,20 @@
-﻿using BusinessLogic.LogicBusiness.Movie;
+﻿using BusinessLogic.LogicBusiness.Area;
+using BusinessLogic.LogicBusiness.Cinema;
+using BusinessLogic.LogicBusiness.Hall;
+using BusinessLogic.LogicBusiness.Movie;
+using BusinessLogic.LogicBusiness.Place;
 using BusinessLogic.LogicBusiness.PlaceSession;
+using BusinessLogic.LogicBusiness.Row;
 using BusinessLogic.LogicBusiness.Session;
 using DataAccess.Models;
 using DataAccess.Repositories;
+using DataAccess.Repositories.Area;
+using DataAccess.Repositories.Cinema;
+using DataAccess.Repositories.Hall;
 using DataAccess.Repositories.Movie;
+using DataAccess.Repositories.Place;
 using DataAccess.Repositories.PlaceSession;
+using DataAccess.Repositories.Row;
 using DataAccess.Repositories.Session;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -16,42 +26,73 @@ namespace IntegerTestsBusinessLogic.Movie
     public class MovieLogicTests
     {
         MovieLogic movieLogic;
+        PlaceSessionLogic placeSessionLogic;
+        SessionLogic sessionLogic;
+        CinemaLogic cinemaLogic;
+        HallLogic hallLogic;
+        AreaLogic areaLogic;
+        RowLogic rowLogic;
+        PlaceLogic placeLogic;
         string connectionString = ConnectionString.connectionStringFake;
+        long idCinema;
+        long idHall;
+        long idMovie;
+        long idSession;
 
         [TestInitialize]
         public void Initialize()
         {
-            movieLogic = new MovieLogic(new MovieRepository(connectionString),
-                                        new SessionLogic(new SessionRepository(connectionString),
-                                                         new PlaceSessionLogic(new PlaceSessionRepository(connectionString))));
+            placeSessionLogic = new PlaceSessionLogic(new PlaceSessionRepository(connectionString));
+            sessionLogic = new SessionLogic(new SessionRepository(connectionString), placeSessionLogic);
+            movieLogic = new MovieLogic(new MovieRepository(connectionString), sessionLogic);
+            placeLogic = new PlaceLogic(new PlaceRepository(connectionString), placeSessionLogic);
+            rowLogic = new RowLogic(new RowRepository(connectionString), placeLogic);
+            areaLogic = new AreaLogic(new AreaRepository(connectionString), rowLogic, placeLogic);
+            hallLogic = new HallLogic(new HallRepository(connectionString), areaLogic, sessionLogic);
+            cinemaLogic = new CinemaLogic(new CinemaRepository(connectionString), hallLogic);
+
+            idCinema = cinemaLogic.AddCinema("TestCinemaByMovie", "img");
+            idHall = hallLogic.AddHall(idCinema);
+            idMovie = movieLogic.AddMovie("TestMovieForGetMovie", "Test", new DateTime(2022, 5, 20, 19, 0, 0));
+            idSession = sessionLogic.AddSession(idMovie, idHall, 100);
         }
 
         [TestMethod]
         public void AddMovieTest()
         {
-            long result = movieLogic.AddMovie("Bad Boys 2", "Cool Film",
-                                             new DateTime(1900, 1, 1, 12, 12, 0));
+            //Act
+            long result = movieLogic.AddMovie("TestMovieForAdd", "Test", DateTime.Now);
             long expected = movieLogic.GetMovie(result).Id;
+
+            //Assert
             Assert.AreEqual(expected, result);
         }
 
         [TestMethod]
         public void DeleteMovieTest()
         {
-            //long id = movieLogic.AddMovie("Interstellar", "Very cool film",
-            //                                  new DateTime(2021, 5, 20, 22, 00, 00));
-            long id = 1;
-            movieLogic.DeleteMovie(id);
-            Assert.IsNull(movieLogic.GetMovie(id));
+            //Arrange
+            long idArea = movieLogic.AddMovie("TestMovieForDelete", "Test", DateTime.Now);
+
+            //Act
+            movieLogic.DeleteMovie(idArea);
+
+            //Assert
+            Assert.IsNull(movieLogic.GetMovie(idArea));
         }
 
         [TestMethod]
         public void UpdateMovieTest()
         {
-            MovieModel expected = new MovieModel(2, "Test update", "true", new DateTime(2022, 5, 20, 12, 00, 00));
-            movieLogic.UpdateMovie(expected);
-            MovieModel result = movieLogic.GetMovie(2);
+            //Arrange
+            long idMovie = movieLogic.AddMovie("TestMovieForUpdate", "test", new DateTime(2022, 5, 20, 12, 00, 00));
+            MovieModel expected = new MovieModel(idMovie, "TestMovieForUpdate", "Test", new DateTime(2022, 5, 20, 12, 00, 00));
 
+            //Act
+            movieLogic.UpdateMovie(expected);
+            MovieModel result = movieLogic.GetMovie(idMovie);
+
+            //Assert
             Assert.AreEqual(expected.Id, result.Id);
             Assert.AreEqual(expected.Name, result.Name);
             Assert.AreEqual(expected.Time, result.Time);
@@ -61,12 +102,14 @@ namespace IntegerTestsBusinessLogic.Movie
         [TestMethod]
         public void GetMoviesTest()
         {
+            //Arrange
             List<MovieModel> expected = movieLogic.GetMovies();
-            expected.Add(movieLogic.GetMovie(movieLogic.AddMovie("FilmTest", "good",
-                                             new DateTime(2020, 4, 24, 18, 20, 00))));
+            expected.Add(movieLogic.GetMovie(movieLogic.AddMovie("TestMovieForGetMovies", "Test", DateTime.Now)));
 
+            //Act
             List<MovieModel> result = movieLogic.GetMovies();
 
+            //Assert
             for (int i = 0; i < result.Count; i++)
             {
                 Assert.AreEqual(expected[i].Id, result[i].Id);
@@ -79,36 +122,42 @@ namespace IntegerTestsBusinessLogic.Movie
         [TestMethod]
         public void GetMovieTest()
         {
-            MovieModel expected = new MovieModel(3, "Bad Boys 3", "Cool Film 3",
-                                             new DateTime(2022, 5, 20, 19, 0, 0));
-            MovieModel result = movieLogic.GetMovie(3);
+            //Arrange
+            MovieModel expected = new MovieModel(idMovie, "TestMovieForGetMovie", "Test", new DateTime(2022, 5, 20, 19, 0, 0));
 
+            //Act
+            MovieModel result = movieLogic.GetMovie(idMovie);
+
+            //Assert
             Assert.AreEqual(expected.Id, result.Id);
             Assert.AreEqual(expected.Name, result.Name);
             Assert.AreEqual(expected.Time, result.Time);
             Assert.AreEqual(expected.Discription, result.Discription);
         }
 
-        //[TestMethod]
-        //public void GetAllMoviesForThisCinemaTest()
-        //{
-        //    List<MovieModel> expected = new List<MovieModel>()
-        //    {
-        //        new MovieModel(2, "Test update", "true", new DateTime(2022, 5, 20, 12, 00, 00)),
-        //        new MovieModel(3, "Bad Boys 3", "Cool Film 3", new DateTime(2022, 5, 20, 19, 0, 0)),
-        //        new MovieModel(4, "Bad Boys 4", "Cool Film 4", new DateTime(2022, 5, 20, 17, 0, 0))
-        //    };
+        [TestMethod]
+        public void GetMoviesWithCinema()
+        {
+            //Arrange
+            List<MovieSessionModel> expected = new List<MovieSessionModel>()
+            {
+                new MovieSessionModel(idMovie,"TestMovie","Test",new DateTime(2022, 5, 20, 19, 0, 0),idSession,idHall,100)
+            };
 
+            //Act
+            List<MovieSessionModel> result = movieLogic.GetMoviesWithCinema(idCinema);
 
-        //    List<MovieModel> result = movieLogic.GetMoviesWithCinema(3);
-
-        //    for (int i = 0; i < expected.Count; i++)
-        //    {
-        //        Assert.AreEqual(expected[i].Id, result[i].Id);
-        //        Assert.AreEqual(expected[i].Name, result[i].Name);
-        //        Assert.AreEqual(expected[i].Time, result[i].Time);
-        //        Assert.AreEqual(expected[i].Discription, result[i].Discription);
-        //    }
-        //}        
+            //Assert
+            for (int i = 0; i < result.Count; i++)
+            {
+                Assert.AreEqual(expected[i].IdMovie, result[i].IdMovie);
+                Assert.AreEqual(expected[i].Name, result[i].Name);
+                Assert.AreEqual(expected[i].Discription, result[i].Discription);
+                Assert.AreEqual(expected[i].Time, result[i].Time);
+                Assert.AreEqual(expected[i].IdSession, result[i].IdSession);
+                Assert.AreEqual(expected[i].IdHall, result[i].IdHall);
+                Assert.AreEqual(expected[i].Price, result[i].Price);
+            }
+        }
     }
 }

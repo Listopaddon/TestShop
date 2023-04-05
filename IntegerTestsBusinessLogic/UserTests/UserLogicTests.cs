@@ -1,6 +1,8 @@
-﻿using BusinessLogic.LogicBusiness.User;
+﻿using BusinessLogic.LogicBusiness.PlaceSession;
+using BusinessLogic.LogicBusiness.User;
 using DataAccess.Models;
 using DataAccess.Repositories;
+using DataAccess.Repositories.PlaceSession;
 using DataAccess.Repositories.User;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
@@ -10,41 +12,55 @@ namespace IntegerTestsBusinessLogic.UserTests
     [TestClass]
     public class UserLogicTests
     {
-        UserLogic uLogic;
+        UserLogic userLogic;
+        PlaceSessionLogic placeSessionLogic;
         string connectionString = ConnectionString.connectionStringFake;
+        long idUser ;
 
         [TestInitialize]
         public void Initialize()
         {
-            uLogic = new UserLogic(new UserRepository(connectionString));
+            placeSessionLogic = new PlaceSessionLogic(new PlaceSessionRepository(connectionString));
+            userLogic = new UserLogic(new UserRepository(connectionString), placeSessionLogic);
+            idUser = userLogic.AddUser("TestUser", "1111", "testRole");
         }
 
         [TestMethod]
         public void AddUserTest()
         {
-            long result = uLogic.AddUser("TestUser", "1111", "testRole");
-            long expected = uLogic.GetUser(result).Id;
+            //Act
+            long result = userLogic.AddUser("TestUser", "1111", "testRole");
+            long expected = userLogic.GetUser(result).Id;
 
+            //Assert
             Assert.AreEqual(expected, result);
         }
 
         [TestMethod]
         public void DeleteUserTest()
         {
-            long id = uLogic.AddUser("TestUser", "1111", "testRole");
-            uLogic.DeleteUser(id);
+            //Arrange
+            long idUser = userLogic.AddUser("TestUser","Test","Test");
 
-            Assert.IsNull(uLogic.GetUser(id));
+            //Act
+            userLogic.DeleteUser(idUser);
+
+            //Assert
+            Assert.IsNull(userLogic.GetUser(idUser));
         }
 
         [TestMethod]
         public void UpdateUserTest()
         {
-            long id = uLogic.AddUser("TestUser", "1111", "testRole");
-            UserModel expected = new UserModel(id, "Puziks", "123321", "Admin");
-            uLogic.UpdateUser(expected);
-            UserModel result = uLogic.GetUser(id);
+            //Arrange
+            long idUser = userLogic.AddUser("Test","Test","Test");
+            UserModel expected = new UserModel(idUser, "Puziks", "123321", "Admin");
 
+            //Act
+            userLogic.UpdateUser(expected);
+            UserModel result = userLogic.GetUser(idUser);
+
+            //Assert
             Assert.AreEqual(expected.Id, result.Id);
             Assert.AreEqual(expected.Login, result.Login);
             Assert.AreEqual(expected.Password, result.Password);
@@ -54,11 +70,14 @@ namespace IntegerTestsBusinessLogic.UserTests
         [TestMethod]
         public void GetUsersTest()
         {
-            List<UserModel> expected = uLogic.GetUsers();
-            expected.Add(uLogic.GetUser(uLogic.AddUser("Vasja", "54", "User")));
+            //Arrange
+            List<UserModel> expected = userLogic.GetUsers();
+            expected.Add(userLogic.GetUser(userLogic.AddUser("Vasja", "54", "User")));
 
-            List<UserModel> result = uLogic.GetUsers();
+            //Act
+            List<UserModel> result = userLogic.GetUsers();
 
+            //Assert
             for (int i = 0; i < result.Count; i++)
             {
                 Assert.AreEqual(expected[i].Id, result[i].Id);
@@ -71,10 +90,14 @@ namespace IntegerTestsBusinessLogic.UserTests
         [TestMethod]
         public void GetUserTest()
         {
-            long id = uLogic.AddUser("TestUser", "1111", "testRole");
-            UserModel expected = new UserModel(id, "TestUser", "1111", "testRole");
-            UserModel result = uLogic.GetUser(id);
+            //Arrange
+            long idUser = userLogic.AddUser("TestUser", "1111", "testRole");
+            UserModel expected = new UserModel(idUser, "TestUser", "1111", "testRole");
 
+            //Act
+            UserModel result = userLogic.GetUser(idUser);
+
+            //Assert
             Assert.AreEqual(expected.Id, result.Id);
             Assert.AreEqual(expected.Login, result.Login);
             Assert.AreEqual(expected.Password, result.Password);

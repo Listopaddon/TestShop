@@ -33,11 +33,13 @@ namespace UnitTestBusinessLogic.Tests.PlaceSessionTests
         [TestMethod]
         public void DeletePlaceSessionTest()
         {
+            //Arrange
             PlaceSessionModel result = null;
             long id = 2;
             List<PlaceSessionModel> places = placeSessionLogic.GetPlaceSessions();
-            placeSessionLogic.DeletePlaceSession(id);
 
+            //Act
+            placeSessionLogic.DeletePlaceSession(id);
             for (int i = 0; i < places.Count; i++)
             {
                 if (places[i].Id == id)
@@ -47,16 +49,21 @@ namespace UnitTestBusinessLogic.Tests.PlaceSessionTests
                 }
             }
 
+            //Assert
             Assert.IsNull(result);
         }
 
         [TestMethod]
         public void UpdatePlaceSessionTest()
         {
+            //Arrange
             PlaceSessionModel expected = new PlaceSessionModel(2, 1, 1, 1, new DateTime(20, 00), StatePlace.Buy);
             placeSessionLogic.UpdatePlaceSession(expected);
+
+            //Act
             List<PlaceSessionModel> places = placeSessionLogic.GetPlaceSessions();
 
+            //Assert
             Assert.AreEqual(expected.Id, places[2].Id);
             Assert.AreEqual(expected.IdPlaces, places[2].IdPlaces);
             Assert.AreEqual(expected.IdSession, places[2].IdSession);
@@ -68,6 +75,7 @@ namespace UnitTestBusinessLogic.Tests.PlaceSessionTests
         [TestMethod]
         public void GetPlaceSessionsTest()
         {
+            //Arrange
             List<PlaceSessionModel> expected = new List<PlaceSessionModel>
             {
                 new PlaceSessionModel(0,3,40,5,new DateTime(20, 00), StatePlace.Buy),
@@ -77,8 +85,11 @@ namespace UnitTestBusinessLogic.Tests.PlaceSessionTests
                 new PlaceSessionModel(4,35,40,45,new DateTime(20, 00), StatePlace.Buy),
                 new PlaceSessionModel(5,36,14,15,new DateTime(20, 00), StatePlace.Buy)
             };
+
+            //Act
             List<PlaceSessionModel> result = placeSessionLogic.GetPlaceSessions();
 
+            //Assert
             for (int i = 0; i < expected.Count; i++)
             {
                 Assert.AreEqual(expected[i].Id, result[i].Id);
@@ -93,6 +104,7 @@ namespace UnitTestBusinessLogic.Tests.PlaceSessionTests
         [TestMethod]
         public void GetPlaceSessionFKUserTest()
         {
+            //Arrange
             List<PlaceSessionModel> expected = new List<PlaceSessionModel>
             {
                 new PlaceSessionModel(1,32,41,15,new DateTime(20, 00), StatePlace.Buy),
@@ -100,8 +112,11 @@ namespace UnitTestBusinessLogic.Tests.PlaceSessionTests
                 new PlaceSessionModel(5,36,14,15,new DateTime(20, 00), StatePlace.Buy)
             };
             long id = 15;
+
+            //Act
             List<PlaceSessionModel> result = placeSessionLogic.GetPlaceSessionFKUser(id);
 
+            //Assert
             for (int i = 0; i < expected.Count; i++)
             {
                 Assert.AreEqual(expected[i].Id, result[i].Id);
@@ -116,14 +131,18 @@ namespace UnitTestBusinessLogic.Tests.PlaceSessionTests
         [TestMethod]
         public void GetPlaceSessionFKSessionTest()
         {
+            //Arrange
             List<PlaceSessionModel> expected = new List<PlaceSessionModel>
             {
                 new PlaceSessionModel(0,3,40,5,new DateTime(20, 00), StatePlace.Buy),
                 new PlaceSessionModel(4,35,40,45,new DateTime(20, 00), StatePlace.Buy)
             };
             long id = 40;
+
+            //Act
             List<PlaceSessionModel> result = placeSessionLogic.GetPlaceSessionFKSession(id);
 
+            //Assert
             for (int i = 0; i < expected.Count; i++)
             {
                 Assert.AreEqual(expected[i].Id, result[i].Id);
@@ -138,6 +157,7 @@ namespace UnitTestBusinessLogic.Tests.PlaceSessionTests
         [TestMethod]
         public void GetPlaceSessionFKPlacesTest()
         {
+            //Arrange
             List<PlaceSessionModel> expected = new List<PlaceSessionModel>
             {
                 new PlaceSessionModel(0,3,40,5,new DateTime(20, 00), StatePlace.Buy),
@@ -145,8 +165,11 @@ namespace UnitTestBusinessLogic.Tests.PlaceSessionTests
                 new PlaceSessionModel(3,3,43,15,new DateTime(20, 00), StatePlace.Buy)
             };
             long id = 3;
+
+            //Act
             List<PlaceSessionModel> result = placeSessionLogic.GetPlaceSessionFKPlaces(id);
 
+            //Assert
             for (int i = 0; i < expected.Count; i++)
             {
                 Assert.AreEqual(expected[i].Id, result[i].Id);
@@ -161,9 +184,13 @@ namespace UnitTestBusinessLogic.Tests.PlaceSessionTests
         [TestMethod]
         public void GetPlaceSessionTest()
         {
+            //Arrange
             PlaceSessionModel expected = new PlaceSessionModel(2, 3, 30, 25, new DateTime(20, 00), StatePlace.Buy);
+
+            //Act
             PlaceSessionModel result = placeSessionLogic.GetPlaceSession(2);
 
+            //Assert
             Assert.AreEqual(expected.Id, result.Id);
             Assert.AreEqual(expected.IdPlaces, result.IdPlaces);
             Assert.AreEqual(expected.IdSession, result.IdSession);
@@ -175,11 +202,13 @@ namespace UnitTestBusinessLogic.Tests.PlaceSessionTests
         [TestMethod]
         public void DeleteIdPlaceFromPlaceSession()
         {
+            //Arrange
             long idPlace = 3;
             List<PlaceSessionModel> result = new List<PlaceSessionModel>();
             List<PlaceSessionModel> placeSessions = placeSessionLogic.GetPlaceSessions();
-            placeSessionLogic.DeleteIdPlaceFromPlaceSession(idPlace);
 
+            //Act
+            placeSessionLogic.DeleteIdPlaceFromPlaceSession(idPlace);
             for (int i = 0; i < placeSessions.Count; i++)
             {
                 if (placeSessions[i].IdPlaces == idPlace)
@@ -188,17 +217,20 @@ namespace UnitTestBusinessLogic.Tests.PlaceSessionTests
                 }
             }
 
+            //Assert
             Assert.AreEqual(result.Count, 0);
         }
 
         [TestMethod]
         public void DeleteIdSessionFromPlaceSession()
         {
+            //Arrange
             long idSession = 40;
             List<PlaceSessionModel> result = new List<PlaceSessionModel>();
             List<PlaceSessionModel> placeSessions = placeSessionLogic.GetPlaceSessions();
+            
+            //Act
             placeSessionLogic.DeleteIdSessionFromPlaceSession(idSession);
-
             for (int i = 0; i < placeSessions.Count; i++)
             {
                 if (placeSessions[i].IdSession == idSession)
@@ -207,17 +239,20 @@ namespace UnitTestBusinessLogic.Tests.PlaceSessionTests
                 }
             }
 
+            //Assert
             Assert.AreEqual(result.Count, 0);
         }
 
         [TestMethod]
         public void DeleteIdUserFromPlaceSession()
         {
+            //Arrange
             long idUser = 15;
             List<PlaceSessionModel> result = new List<PlaceSessionModel>();
             List<PlaceSessionModel> placeSessions = placeSessionLogic.GetPlaceSessions();
-            placeSessionLogic.DeleteIdUserFromPlaceSession(idUser);
 
+            //Act
+            placeSessionLogic.DeleteIdUserFromPlaceSession(idUser);
             for (int i = 0; i < placeSessions.Count; i++)
             {
                 if (placeSessions[i].IdUsers == idUser)
@@ -226,6 +261,7 @@ namespace UnitTestBusinessLogic.Tests.PlaceSessionTests
                 }
             }
 
+            //Assert
             Assert.AreEqual(result.Count, 0);
         }
     }

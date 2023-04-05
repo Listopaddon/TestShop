@@ -49,10 +49,14 @@ namespace UnitTestBusinessLogic.Tests.RowTests
         [TestMethod]
         public void UpdateRowTest()
         {
+            //Arrange
             RowModel expected = new RowModel(3, 5, 1);
+
+            //Act
             rowLogic.UpdateRow(expected);
             List<RowModel> result = rowLogic.GetRows();
 
+            //Assert
             Assert.AreEqual(expected.Id, result[3].Id);
             Assert.AreEqual(expected.IdArea, result[3].IdArea);
             Assert.AreEqual(expected.NumberRow, result[3].NumberRow);
@@ -61,11 +65,13 @@ namespace UnitTestBusinessLogic.Tests.RowTests
         [TestMethod]
         public void DeleteRowTest()
         {
+            //Arrange
             long id = 5;
             RowModel result = null;
             List<RowModel> rows = rowLogic.GetRows();
-            rowLogic.DeleteRow(id);
 
+            //Act
+            rowLogic.DeleteRow(id);
             for (int i = 0; i < rows.Count; i++)
             {
                 if (rows[i].Id == id)
@@ -75,15 +81,20 @@ namespace UnitTestBusinessLogic.Tests.RowTests
                 }
             }
 
+            //Assert
             Assert.IsNull(result);
         }
 
         [TestMethod]
         public void GetRowTest()
         {
+            //Arrange
             RowModel expected = new RowModel(1, 2, 1);
+
+            //Act
             RowModel result = rowLogic.GetRow(1);
 
+            //Assert
             Assert.AreEqual(expected.Id, result.Id);
             Assert.AreEqual(expected.IdArea, result.IdArea);
             Assert.AreEqual(expected.NumberRow, result.NumberRow);
@@ -93,11 +104,14 @@ namespace UnitTestBusinessLogic.Tests.RowTests
         [TestMethod]
         public void GetRowsTest()
         {
+            //Arrange
             List<RowModel> expected = rowLogic.GetRows();
             expected.Add(new RowModel(7, 9, 9));
 
+            //Act
             List<RowModel> result = rowLogic.GetRows();
 
+            //Assert
             for (int i = 0; i < expected.Count; i++)
             {
                 Assert.AreEqual(expected[i].Id, result[i].Id);
@@ -109,6 +123,7 @@ namespace UnitTestBusinessLogic.Tests.RowTests
         [TestMethod]
         public void GetAreaFromRowTest()
         {
+            //Arrange
             List<RowModel> expected = new List<RowModel>
             {
                 new RowModel(0,1,1),
@@ -116,8 +131,10 @@ namespace UnitTestBusinessLogic.Tests.RowTests
                 new RowModel(2,3,1)
             };
 
+            //Act
             List<RowModel> result = rowLogic.GetAreaFromRow(1);
 
+            //Assert
             for (int i = 0; i < expected.Count; i++)
             {
                 Assert.AreEqual(expected[i].Id, result[i].Id);
@@ -129,11 +146,13 @@ namespace UnitTestBusinessLogic.Tests.RowTests
         [TestMethod]
         public void DeleteIdAreaFromRowTest()
         {
+            //Arrange
             long id = 1;
             List<RowModel> result = new List<RowModel>();
             List<RowModel> rows = rowLogic.GetRows();
-            rowLogic.DeleteFkAreas(id);
 
+            //Act
+            rowLogic.DeleteFkAreas(id);
             for (int i = 0; i < rows.Count; i++)
             {
                 if (rows[i].IdArea == id)
@@ -142,6 +161,7 @@ namespace UnitTestBusinessLogic.Tests.RowTests
                 }
             }
 
+            //Assert
             Assert.AreEqual(result.Count, 0);
         }
     }

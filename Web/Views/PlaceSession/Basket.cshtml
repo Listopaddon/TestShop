@@ -55,7 +55,10 @@
 				</td>
 				@Html.HiddenFor(modelItem => item.IdPlaceSession)
 				<td>
-					@Html.ActionLink("Delete check", "DeleteCheck", "PlaceSession", new {id = item.IdPlaceSession})
+					@if(item.TimeSession>DateTime.Today)
+					{
+						@Html.ActionLink("Delete check", "DeleteCheck", "PlaceSession", new {id = item.IdPlaceSession})
+					}					
 				</td>
 			</tr>
 		}

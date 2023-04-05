@@ -40,11 +40,13 @@ namespace UnitTestBusinessLogic.Tests.MovieTests
         [TestMethod]
         public void DeleteMovieTest()
         {
+            //Arrange
             long id = 2;
             MovieModel result = null;
             List<MovieModel> movies = movieLogic.GetMovies();
-            movieLogic.DeleteMovie(2);
 
+            //Act
+            movieLogic.DeleteMovie(2);
             for (int i = 0; i < movies.Count; i++)
             {
                 if (movies[i].Id == id)
@@ -54,12 +56,14 @@ namespace UnitTestBusinessLogic.Tests.MovieTests
                 }
             }
 
+            //Assert
             Assert.IsNull(result);
         }
 
         [TestMethod]
         public void GetMoviesTest()
         {
+            //Arrange
             List<MovieModel> expected = new List<MovieModel>
             {
                 new MovieModel(0,"Bad Boys", "Cool film",new System.DateTime(20,00)),
@@ -72,8 +76,10 @@ namespace UnitTestBusinessLogic.Tests.MovieTests
                 new MovieModel(7,"Bad Boys", "Cool film",new System.DateTime(20,00))
             };
 
+            //Act
             List<MovieModel> result = movieLogic.GetMovies();
 
+            //Assert
             for (int i = 0; i < expected.Count; i++)
             {
                 Assert.AreEqual(expected[i].Id, result[i].Id);
@@ -86,10 +92,14 @@ namespace UnitTestBusinessLogic.Tests.MovieTests
         [TestMethod]
         public void UpdateMovieTest()
         {
+            //Arrange
             MovieModel expected = new MovieModel(3, "5 Element", "Mega film", new System.DateTime(15, 00));
+
+            //Act
             movieLogic.UpdateMovie(expected);
             List<MovieModel> movies = movieLogic.GetMovies();
 
+            //Assert
             Assert.AreEqual(expected.Id, movies[3].Id);
             Assert.AreEqual(expected.Name, movies[3].Name);
             Assert.AreEqual(expected.Discription, movies[3].Discription);
@@ -99,33 +109,17 @@ namespace UnitTestBusinessLogic.Tests.MovieTests
         [TestMethod]
         public void GetMovieTest()
         {
+            //Arrange
             MovieModel expected = new MovieModel(1, "Bad Boys 2", "Cool film", new System.DateTime(22, 00));
+
+            //Act
             MovieModel result = movieLogic.GetMovie(1);
 
+            //Assert
             Assert.AreEqual(expected.Id, result.Id);
             Assert.AreEqual(expected.Name, result.Name);
             Assert.AreEqual(expected.Time, result.Time);
             Assert.AreEqual(expected.Discription, result.Discription);
         }
-
-        //[TestMethod]
-        //public void GetAllMoviesForThisCinemaTest()
-        //{
-        //    List<MovieModel> expected = new List<MovieModel>
-        //    {
-        //        new MovieModel(0, "Create Movie", "Discription", new DateTime()),
-        //        new MovieModel(0, "Create Movie", "Discription", new DateTime())
-        //    };
-
-        //    List<MovieModel> result = movieLogic.GetMoviesWithCinema(1);
-
-        //    for (int i = 0; i < expected.Count; i++)
-        //    {
-        //        Assert.AreEqual(expected[i].Id, result[i].Id);
-        //        Assert.AreEqual(expected[i].Name, result[i].Name);
-        //        Assert.AreEqual(expected[i].Discription, result[i].Discription);
-        //        Assert.AreEqual(expected[i].Time, result[i].Time);
-        //    }
-        //}
     }
 }

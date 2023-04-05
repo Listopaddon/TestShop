@@ -45,7 +45,8 @@ namespace DataAccess.Repositories.PlaceSession
                 new SqlParameter("@IdPlaces", placeSession.IdPlaces),
                 new SqlParameter("@IdSession", placeSession.IdSession),
                 new SqlParameter("@IdUsers", placeSession.IdUsers),
-                new SqlParameter("@DateModified", placeSession.DateModified)
+                new SqlParameter("@DateModified", placeSession.DateModified),
+                new SqlParameter("@State",placeSession.State)
            };
             CreateCommand("sp_UpdatePlaceSession", new SqlConnection(connectionString), parameters).ExecuteScalar();
         }

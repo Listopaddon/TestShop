@@ -34,11 +34,13 @@ namespace UnitTestBusinessLogic.Tests.CinemaTests
         [TestMethod]
         public void DeleteCinemaTest()
         {
+            //Arrange
             long id = 4;
             CinemaModel result = null;
             List<CinemaModel> cinemaDtos = cinemaLogic.GetCinemas();
-            cinemaLogic.DeleteCinema(id);
 
+            //Act
+            cinemaLogic.DeleteCinema(id);
             for (int i = 0; i < cinemaDtos.Count; i++)
             {
                 if (cinemaDtos[i].Id == id)
@@ -48,12 +50,14 @@ namespace UnitTestBusinessLogic.Tests.CinemaTests
                 }
             }
 
+            //Assert
             Assert.IsNull(result);
         }
 
         [TestMethod]
         public void GetCinemasTest()
         {
+            //Arrange
             List<CinemaModel> expected = new List<CinemaModel>
             {
                 new CinemaModel(0,"October","pic"),
@@ -64,8 +68,10 @@ namespace UnitTestBusinessLogic.Tests.CinemaTests
                 new CinemaModel(5,"Tolstogo","pic")
             };
 
+            //Act
             List<CinemaModel> result = cinemaLogic.GetCinemas();
 
+            //Assert
             for (int i = 0; i < expected.Count; i++)
             {
                 Assert.AreEqual(expected[i].Id, result[i].Id);
@@ -77,10 +83,14 @@ namespace UnitTestBusinessLogic.Tests.CinemaTests
         [TestMethod]
         public void UpdateCinemaTest()
         {
+            //Arrange
             List<CinemaModel> cinemas = cinemaLogic.GetCinemas();
             CinemaModel expected = new CinemaModel(2, "Replace", "pic");
+
+            //Act
             cinemaLogic.UpdateCinema(new CinemaModel(2, "Replace", "pic"));
 
+            //Assert
             Assert.AreEqual(expected.Id, cinemas[2].Id);
             Assert.AreEqual(expected.Name, cinemas[2].Name);
             Assert.AreEqual(expected.Picture, cinemas[2].Picture);
@@ -89,12 +99,16 @@ namespace UnitTestBusinessLogic.Tests.CinemaTests
         [TestMethod]
         public void GetIdCinemaByFilmFromSessionTest()
         {
+            //Arrange
             List<CinemaModel> expected = new List<CinemaModel>()
             {
                 new CinemaModel(2,"Mir","pic")
             };
+
+            //Act
             List<CinemaModel> result = cinemaLogic.GetIdCinemaByFilmFromSession(1);
 
+            //Assert
             for (int i = 0; i < expected.Count; i++)
             {
                 Assert.AreEqual(expected[i].Id, result[i].Id);

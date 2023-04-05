@@ -33,12 +33,8 @@ namespace Web.Controllers
             long idCinema = Convert.ToInt64(HttpContext.Session.GetString("idCinemaForMovie"));
             long idHall = Convert.ToInt64(HttpContext.Session.GetString("idHall"));
             sessionLogic.AddSession(idMovie, idHall, price);
-            MovieModel movie = movieLogic.GetMovie(idMovie);
-            CinemaModel cinema = cinemaLogic.GetCinema(idCinema);
 
-            ResultMovieForAddUI result = new ResultMovieForAddUI(idHall, movie.Name, movie.Discription, cinema.Name, movie.Time);
-
-            return RedirectToAction("Index","Home");
+            return RedirectToAction("GetAllMoviesForCinema", "Home", new { idCinema = idCinema });
         }
 
 

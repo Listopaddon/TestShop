@@ -25,6 +25,7 @@ namespace Web.Controllers
         [Route("Hall/GetHallsByCinema/{idCinema}")]
         public IActionResult GetHallsByCinema(long idCinema)
         {
+            HttpContext.Session.SetString("idCinemaByAllHalls", idCinema.ToString());
             List<HallModel> halls = hallLogic.GetHallByIdCinema(idCinema);
             var hallsUI = mapper.Map<List<HallUI>>(halls);
 
@@ -58,10 +59,9 @@ namespace Web.Controllers
         public IActionResult AddHall()
         {
             long idCinema = Convert.ToInt64(HttpContext.Session.GetString("idCinemaForMovie"));
-            hallLogic.AddHall(idCinema);
-            HttpContext.Request.Headers.TryGetValue("Referer", out var headerValue);
+            long idHall = hallLogic.AddHall(idCinema);
 
-            return Redirect(headerValue[0]);
+            return RedirectToAction("AddAreaByHall", "Area", new { idHall = idHall });
         }
 
         [HttpGet]

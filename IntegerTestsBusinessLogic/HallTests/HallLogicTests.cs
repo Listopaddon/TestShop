@@ -1,6 +1,7 @@
 ﻿using BusinessLogic.LogicBusiness.Area;
 using BusinessLogic.LogicBusiness.Cinema;
 using BusinessLogic.LogicBusiness.Hall;
+using BusinessLogic.LogicBusiness.Movie;
 using BusinessLogic.LogicBusiness.Place;
 using BusinessLogic.LogicBusiness.PlaceSession;
 using BusinessLogic.LogicBusiness.Row;
@@ -10,11 +11,13 @@ using DataAccess.Repositories;
 using DataAccess.Repositories.Area;
 using DataAccess.Repositories.Cinema;
 using DataAccess.Repositories.Hall;
+using DataAccess.Repositories.Movie;
 using DataAccess.Repositories.Place;
 using DataAccess.Repositories.PlaceSession;
 using DataAccess.Repositories.Row;
 using DataAccess.Repositories.Session;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
 
 namespace IntegerTestsBusinessLogic.Hall
@@ -23,47 +26,75 @@ namespace IntegerTestsBusinessLogic.Hall
     public class HallLogicTests
     {
         HallLogic hallLogic;
+        AreaLogic areaLogic;
+        RowLogic rowLogic;
+        PlaceLogic placeLogic;
+        SessionLogic sessionLogic;
         CinemaLogic cinemaLogic;
+        MovieLogic movieLogic;
         string connectionString = ConnectionString.connectionStringFake;
+        long idCinema;
+        long idHall;
+        long idMovie;
+        long idSession;
 
         [TestInitialize]
         public void Initialize()
         {
-            hallLogic = new HallLogic(new HallRepository(connectionString),
-                                      new AreaLogic(new AreaRepository(connectionString),
-                                                          new RowLogic(new RowRepository(connectionString),
-                                                          new PlaceLogic(new PlaceRepository(connectionString),
-                                                                         new PlaceSessionLogic(new PlaceSessionRepository(connectionString))))),
-                                      new SessionLogic(new SessionRepository(connectionString),
-                                                       new PlaceSessionLogic(new PlaceSessionRepository(connectionString))));
+            placeLogic = new PlaceLogic(new PlaceRepository(connectionString), new PlaceSessionLogic(new PlaceSessionRepository(connectionString)));
+            rowLogic = new RowLogic(new RowRepository(connectionString), placeLogic);
+            areaLogic = new AreaLogic(new AreaRepository(connectionString), rowLogic, placeLogic);
+            sessionLogic = new SessionLogic(new SessionRepository(connectionString), new PlaceSessionLogic(new PlaceSessionRepository(connectionString)));
+            hallLogic = new HallLogic(new HallRepository(connectionString), areaLogic, sessionLogic);
             cinemaLogic = new CinemaLogic(new CinemaRepository(connectionString), hallLogic);
+            movieLogic = new MovieLogic(new MovieRepository(connectionString), sessionLogic);
+
+            idCinema = cinemaLogic.AddCinema("TestCinemaForUpdateHall", "img");
+            idHall = hallLogic.AddHall(idCinema);
+            idMovie = movieLogic.AddMovie("TestFilmByHall", "Test", DateTime.Now);
+            idSession = sessionLogic.AddSession(idMovie, idHall, 100);
         }
 
         [TestMethod]
         public void AddHallTest()
         {
-            long result = hallLogic.AddHall(3);
+            //Arrange
+            long idCinema = cinemaLogic.AddCinema("TestCinemaForAddHall", "img");
+
+            //Act
+            long result = hallLogic.AddHall(idCinema);
             long expected = hallLogic.GetHall(result).Id;
 
+            //Assert
             Assert.AreEqual(expected, result);
         }
 
         [TestMethod]
         public void DeleteHallTest()
         {
-            long id = hallLogic.AddHall(3);
-            hallLogic.DeleteHall(id);
+            //Arrange
+            long idCinema = cinemaLogic.AddCinema("TestCinemaForDeleteHall", "img");
+            long idHall = hallLogic.AddHall(idCinema);
 
-            Assert.IsNull(hallLogic.GetHall(id));
+            //Act
+            hallLogic.DeleteHall(idHall);
+
+            //Assert
+            Assert.IsNull(hallLogic.GetHall(idHall));
         }
 
         [TestMethod]
         public void UpdateHallTest()
         {
-            HallModel expected = new HallModel(2, 3);
-            hallLogic.UpdateHall(expected);
-            HallModel result = hallLogic.GetHall(2);
+            //Arrange            
+            long idCinemaAfterUpdate = cinemaLogic.AddCinema("TestCinemaAfterUpdate", "img");
+            HallModel expected = new HallModel(idHall, idCinemaAfterUpdate);
 
+            //Act
+            hallLogic.UpdateHall(expected);
+            HallModel result = hallLogic.GetHall(idHall);
+
+            //Assert
             Assert.AreEqual(expected.Id, result.Id);
             Assert.AreEqual(expected.IdCinema, result.IdCinema);
         }
@@ -71,11 +102,14 @@ namespace IntegerTestsBusinessLogic.Hall
         [TestMethod]
         public void GetHallsTest()
         {
+            //Arrange
             List<HallModel> expected = hallLogic.GetHalls();
-            expected.Add(hallLogic.GetHall(hallLogic.AddHall(3)));
+            expected.Add(hallLogic.GetHall(hallLogic.AddHall(idCinema)));
 
+            //Act
             List<HallModel> result = hallLogic.GetHalls();
 
+            //Assert
             for (int i = 0; i < expected.Count; i++)
             {
                 Assert.AreEqual(expected[i].Id, result[i].Id);
@@ -86,9 +120,13 @@ namespace IntegerTestsBusinessLogic.Hall
         [TestMethod]
         public void GetHallTest()
         {
-            HallModel expected = new HallModel(3, 3);
-            HallModel result = hallLogic.GetHall(3);
+            //Arrange
+            HallModel expected = new HallModel(idHall, idCinema);
 
+            //Act
+            HallModel result = hallLogic.GetHall(idHall);
+
+            //Assert
             Assert.AreEqual(expected.Id, result.Id);
             Assert.AreEqual(expected.IdCinema, result.IdCinema);
         }
@@ -96,17 +134,16 @@ namespace IntegerTestsBusinessLogic.Hall
         [TestMethod]
         public void GetFKCinemaTest()
         {
-            long id = 4;
-            List<HallModel> expected = hallLogic.GetFKCinema(id);
+            //Arrange
+            List<HallModel> expected = hallLogic.GetFKCinema(idCinema);
+            expected.Add(hallLogic.GetHall(hallLogic.AddHall(idCinema)));
+            expected.Add(hallLogic.GetHall(hallLogic.AddHall(idCinema)));
+            expected.Add(hallLogic.GetHall(hallLogic.AddHall(idCinema)));
 
-            expected.Add(hallLogic.GetHall(hallLogic.AddHall(id)));
-            expected.Add(hallLogic.GetHall(hallLogic.AddHall(id)));
-            expected.Add(hallLogic.GetHall(hallLogic.AddHall(id)));
+            //Act
+            List<HallModel> result = hallLogic.GetFKCinema(idCinema);
 
-
-
-            List<HallModel> result = hallLogic.GetFKCinema(id);
-
+            //Assert
             for (int i = 0; i < result.Count; i++)
             {
                 Assert.AreEqual(expected[i].Id, result[i].Id);
@@ -115,33 +152,39 @@ namespace IntegerTestsBusinessLogic.Hall
         }
 
         [TestMethod]
-        public void GetHallByIdMovieTest()
+        public void GetHallByIdMovie()
         {
+            //Arrange            
             List<HallModel> expected = new List<HallModel>()
             {
-                new HallModel(1,1)
+                new HallModel(idHall,idCinema)
             };
 
-            List<HallModel> result = hallLogic.GetHallByIdMovie(1,1);
+            //Act
+            List<HallModel> result = hallLogic.GetHallByIdMovie(idMovie, idCinema);
 
+            //Assert
             for (int i = 0; i < result.Count; i++)
             {
                 Assert.AreEqual(expected[i].Id, result[i].Id);
                 Assert.AreEqual(expected[i].IdCinema, result[i].IdCinema);
             }
-
         }
 
         [TestMethod]
-        public void GetHallByIdCinemaTest()
+        public void GetHallByIdCinema()
         {
-            List<HallModel> expected = new List<HallModel>()
-            {
-                new HallModel(1,1)
-            };
+            //Arrange
+            long idCinema = cinemaLogic.AddCinema("TestCinemaByGetHallsByIdCinema", "jpg");
+            List<HallModel> expected = new List<HallModel>();
+            expected.Add(hallLogic.GetHall(hallLogic.AddHall(idCinema)));
+            expected.Add(hallLogic.GetHall(hallLogic.AddHall(idCinema)));
+            expected.Add(hallLogic.GetHall(hallLogic.AddHall(idCinema)));
 
-            List<HallModel> result = hallLogic.GetHallByIdCinema(1);
+            //Act
+            List<HallModel> result = hallLogic.GetHallByIdCinema(idCinema);
 
+            //Assert
             for (int i = 0; i < result.Count; i++)
             {
                 Assert.AreEqual(expected[i].Id, result[i].Id);

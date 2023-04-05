@@ -1,6 +1,7 @@
 ﻿using BusinessLogic.LogicBusiness.Area;
 using BusinessLogic.LogicBusiness.Cinema;
 using BusinessLogic.LogicBusiness.Hall;
+using BusinessLogic.LogicBusiness.Movie;
 using BusinessLogic.LogicBusiness.Place;
 using BusinessLogic.LogicBusiness.PlaceSession;
 using BusinessLogic.LogicBusiness.Row;
@@ -10,11 +11,13 @@ using DataAccess.Repositories;
 using DataAccess.Repositories.Area;
 using DataAccess.Repositories.Cinema;
 using DataAccess.Repositories.Hall;
+using DataAccess.Repositories.Movie;
 using DataAccess.Repositories.Place;
 using DataAccess.Repositories.PlaceSession;
 using DataAccess.Repositories.Row;
 using DataAccess.Repositories.Session;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
 
 namespace IntegerTestsBusinessLogic.Cinema
@@ -23,38 +26,57 @@ namespace IntegerTestsBusinessLogic.Cinema
     public class CinemaLogicTest
     {
         CinemaLogic cinemaLogic;
+        HallLogic hallLogic;
+        AreaLogic areaLogic;
+        RowLogic rowLogic;
+        PlaceLogic placeLogic;
+        SessionLogic sessionLogic;
+        MovieLogic movieLogic;
         string connectionString = ConnectionString.connectionStringFake;
+        long idCinema;
+        long idHall ;
+        long idMovie ;
+        long idSession;
 
         [TestInitialize]
         public void Initialize()
         {
-            cinemaLogic = new CinemaLogic(new CinemaRepository(connectionString),
-                                          new HallLogic(new HallRepository(connectionString),
-                                                        new AreaLogic(new AreaRepository(connectionString),
-                                                                      new RowLogic(new RowRepository(connectionString),
-                                                                      new PlaceLogic(new PlaceRepository(connectionString),
-                                                                                     new PlaceSessionLogic(new PlaceSessionRepository(connectionString))))),
-                                                        new SessionLogic(new SessionRepository(connectionString),
-                                                                         new PlaceSessionLogic(new PlaceSessionRepository(connectionString)))));
+            placeLogic = new PlaceLogic(new PlaceRepository(connectionString), new PlaceSessionLogic(new PlaceSessionRepository(connectionString)));
+            rowLogic = new RowLogic(new RowRepository(connectionString), placeLogic);
+            areaLogic = new AreaLogic(new AreaRepository(connectionString), rowLogic, placeLogic);
+            sessionLogic = new SessionLogic(new SessionRepository(connectionString), new PlaceSessionLogic(new PlaceSessionRepository(connectionString)));
+            hallLogic = new HallLogic(new HallRepository(connectionString), areaLogic, sessionLogic);
+            cinemaLogic = new CinemaLogic(new CinemaRepository(connectionString), hallLogic);
+            movieLogic = new MovieLogic(new MovieRepository(connectionString), sessionLogic);
+
+            idCinema = cinemaLogic.AddCinema("TestCinemaByGetIdCinema", "jpg");
+            idHall = hallLogic.AddHall(idCinema);
+            idMovie = movieLogic.AddMovie("TestFilmByCinema", "Test", DateTime.Now);
+            idSession = sessionLogic.AddSession(idMovie, idHall, 100);
         }
 
         [TestMethod]
         public void AddCinemaTest()
         {
-            long result = cinemaLogic.AddCinema("Lenin", "jpg");
+            //Act
+            long result = cinemaLogic.AddCinema("TestCinemaForAddCinema", "jpg");
             long expected = cinemaLogic.GetCinema(result).Id;
 
+            //Assert
             Assert.AreEqual(expected, result);
         }
 
         [TestMethod]
         public void GetCinemasTest()
         {
+            //Arrange
             List<CinemaModel> expected = cinemaLogic.GetCinemas();
-            expected.Add(cinemaLogic.GetCinema(cinemaLogic.AddCinema("Vaselenskiy", "jpg")));
+            expected.Add(cinemaLogic.GetCinema(cinemaLogic.AddCinema("TestCinemaForGetCinemas", "jpg")));
 
+            //Act
             List<CinemaModel> result = cinemaLogic.GetCinemas();
 
+            //Assert
             for (int i = 0; i < expected.Count; i++)
             {
                 Assert.AreEqual(expected[i].Id, result[i].Id);
@@ -66,18 +88,27 @@ namespace IntegerTestsBusinessLogic.Cinema
         [TestMethod]
         public void DeleteCinemaTest()
         {
-            long id = cinemaLogic.AddCinema("test delete", "jpg"); ;
-            cinemaLogic.DeleteCinema(id);
-            Assert.IsNull(cinemaLogic.GetCinema(id));
+            //Arrange
+            long idCinema = cinemaLogic.AddCinema("TestCinemaForDeleteCinema", "jpg");
+
+            //Act
+            cinemaLogic.DeleteCinema(idCinema);
+
+            //Assert
+            Assert.IsNull(cinemaLogic.GetCinema(idCinema));
         }
 
         [TestMethod]
         public void UpdateCinemaTest()
         {
-            CinemaModel expected = new CinemaModel(2, "testUpdate", "jpg");
-            cinemaLogic.UpdateCinema(expected);
-            CinemaModel result = cinemaLogic.GetCinema(2);
+            //Arrange
+            CinemaModel expected = new CinemaModel(idCinema, "TestCinemaForUpdateCinemaIsTrue", "jpg");
 
+            //Act
+            cinemaLogic.UpdateCinema(expected);
+            CinemaModel result = cinemaLogic.GetCinema(idCinema);
+
+            //Assert
             Assert.AreEqual(expected.Id, result.Id);
             Assert.AreEqual(expected.Name, result.Name);
             Assert.AreEqual(expected.Picture, result.Picture);
@@ -86,32 +117,37 @@ namespace IntegerTestsBusinessLogic.Cinema
         [TestMethod]
         public void GetCinema()
         {
-            CinemaModel expected = new CinemaModel(3, "Мир", "jpg");
-            CinemaModel result = cinemaLogic.GetCinema(3);
+            //Arrange
+            CinemaModel expected = new CinemaModel(idCinema, "TestCinemaByGetIdCinema", "jpg");
 
+            //Act
+            CinemaModel result = cinemaLogic.GetCinema(idCinema);
+
+            //Assert
             Assert.AreEqual(expected.Id, result.Id);
             Assert.AreEqual(expected.Name, result.Name);
             Assert.AreEqual(expected.Picture, result.Picture);
         }
 
         [TestMethod]
-        public void GetIdCinemaByFilmFromSession()
+        public void GetIdCinemaByFilmFromSessionTest()
         {
+            //Arrange
             List<CinemaModel> expected = new List<CinemaModel>()
             {
-                new CinemaModel(1, "Октябрь", "jpg")
+                new CinemaModel(idCinema,"TestCinemaByGetIdCinema", "jpg")
             };
 
-            List<CinemaModel> result = cinemaLogic.GetIdCinemaByFilmFromSession(1);
+            //Act
+            List<CinemaModel> result = cinemaLogic.GetIdCinemaByFilmFromSession(idMovie);
 
+            //Assert
             for (int i = 0; i < expected.Count; i++)
             {
                 Assert.AreEqual(expected[i].Id, result[i].Id);
                 Assert.AreEqual(expected[i].Name, result[i].Name);
                 Assert.AreEqual(expected[i].Picture, result[i].Picture);
             }
-
-
         }
     }
 }

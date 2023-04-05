@@ -79,8 +79,8 @@ namespace DataAccess.Repositories.Movie
         public List<MovieSessionModel> GetAllMovieForThisCinema(long idCinema)
         {
             List<MovieSessionModel> movies = new List<MovieSessionModel>();
-            SqlParameter parameter = new SqlParameter("@IdCinema", idCinema);
-            var reader = CreateCommand("sp_GetAllMovieForThisCinema", new SqlConnection(connectionString), parameter).ExecuteReader();
+            var reader = CreateCommand("sp_GetAllMovieForThisCinema", new SqlConnection(connectionString),
+                                                                      new SqlParameter("@IdCinema", idCinema)).ExecuteReader();
 
             if (reader.HasRows)
             {

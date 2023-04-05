@@ -1,9 +1,19 @@
-﻿using BusinessLogic.LogicBusiness.Place;
+﻿using BusinessLogic.LogicBusiness.Area;
+using BusinessLogic.LogicBusiness.Cinema;
+using BusinessLogic.LogicBusiness.Hall;
+using BusinessLogic.LogicBusiness.Place;
 using BusinessLogic.LogicBusiness.PlaceSession;
+using BusinessLogic.LogicBusiness.Row;
+using BusinessLogic.LogicBusiness.Session;
 using DataAccess.Models;
 using DataAccess.Repositories;
+using DataAccess.Repositories.Area;
+using DataAccess.Repositories.Cinema;
+using DataAccess.Repositories.Hall;
 using DataAccess.Repositories.Place;
 using DataAccess.Repositories.PlaceSession;
+using DataAccess.Repositories.Row;
+using DataAccess.Repositories.Session;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 
@@ -13,19 +23,41 @@ namespace IntegerTestsBusinessLogic.Place
     public class PlaceLogicTests
     {
         PlaceLogic placeLogic;
+        RowLogic rowLogic;
+        PlaceSessionLogic placeSessionLogic;
+        AreaLogic areaLogic;
+        CinemaLogic cinemaLogic;
+        HallLogic hallLogic;
+        SessionLogic sessionLogic;
         string connectionString = ConnectionString.connectionStringFake;
+        long idCinema;
+        long idHall;
+        long idArea;
+        long idRow;
+        long idPlace;
 
         [TestInitialize]
         public void Initialize()
         {
-            placeLogic = new PlaceLogic(new PlaceRepository(connectionString),
-                                        new PlaceSessionLogic(new PlaceSessionRepository(connectionString)));
+            placeLogic = new PlaceLogic(new PlaceRepository(connectionString), placeSessionLogic);
+            rowLogic = new RowLogic(new RowRepository(connectionString), placeLogic);
+            sessionLogic = new SessionLogic(new SessionRepository(connectionString), placeSessionLogic);
+            areaLogic = new AreaLogic(new AreaRepository(connectionString), rowLogic, placeLogic);
+            hallLogic = new HallLogic(new HallRepository(connectionString), areaLogic, sessionLogic);
+            cinemaLogic = new CinemaLogic(new CinemaRepository(connectionString), hallLogic);
+
+            idCinema = cinemaLogic.AddCinema("TestCinema", "img");
+            idHall = hallLogic.AddHall(idCinema);
+            idArea = areaLogic.AddArea(idHall, 2, 4);
+            idRow = rowLogic.AddRow(1, idArea);
+            idPlace = placeLogic.AddPlace(idRow, 25);
         }
 
         [TestMethod]
         public void AddPlaceTest()
         {
-            long result = placeLogic.AddPlace(2, 25);
+            //Act
+            long result = placeLogic.AddPlace(idRow, 30);
             long expected = placeLogic.GetPlace(result).Id;
 
             Assert.AreEqual(expected, result);
@@ -34,18 +66,28 @@ namespace IntegerTestsBusinessLogic.Place
         [TestMethod]
         public void DeletePlaceTest()
         {
-            long id = placeLogic.AddPlace(2,222);
-            placeLogic.DeletePlace(id);
-            Assert.IsNull(placeLogic.GetPlace(id));
+            //Arrange
+            long idPlace = placeLogic.AddPlace(idRow, 20);
+
+            //Act
+            placeLogic.DeletePlace(idPlace);
+
+            //Assert
+            Assert.IsNull(placeLogic.GetPlace(idPlace));
         }
 
         [TestMethod]
         public void UpdatePlaceTest()
         {
-            PlaceModel expected = new PlaceModel(3, 2, 33);
-            placeLogic.UpdatePlace(expected);
-            PlaceModel result = placeLogic.GetPlace(2);
+            //Arrange
+            long idPlace = placeLogic.AddPlace(idRow, 33);
+            PlaceModel expected = new PlaceModel(idPlace, idRow, 50);
 
+            //Act
+            placeLogic.UpdatePlace(expected);
+            PlaceModel result = placeLogic.GetPlace(idPlace);
+
+            //Assert
             Assert.AreEqual(expected.Id, result.Id);
             Assert.AreEqual(expected.IdRow, result.IdRow);
             Assert.AreEqual(expected.NumberPlace, result.NumberPlace);
@@ -54,11 +96,14 @@ namespace IntegerTestsBusinessLogic.Place
         [TestMethod]
         public void GetPlacesTest()
         {
+            //Arrange
             List<PlaceModel> expected = placeLogic.GetPlaces();
-            expected.Add(placeLogic.GetPlace(placeLogic.AddPlace(2, 33)));
+            expected.Add(placeLogic.GetPlace(placeLogic.AddPlace(idRow, 33)));
 
+            //Act
             List<PlaceModel> result = placeLogic.GetPlaces();
 
+            //Assert
             for (int i = 0; i < result.Count; i++)
             {
                 Assert.AreEqual(expected[i].Id, result[i].Id);
@@ -70,12 +115,14 @@ namespace IntegerTestsBusinessLogic.Place
         [TestMethod]
         public void GetFkRowTest()
         {
-            long fkRow = 2;
-            List<PlaceModel> expected = placeLogic.GetFkRow(fkRow);
-            expected.Add(placeLogic.GetPlace(placeLogic.AddPlace(fkRow, 33)));
+            //Arrange
+            List<PlaceModel> expected = placeLogic.GetFkRow(idRow);
+            expected.Add(placeLogic.GetPlace(placeLogic.AddPlace(idRow, 33)));
 
-            List<PlaceModel> result = placeLogic.GetFkRow(fkRow);
+            //Act
+            List<PlaceModel> result = placeLogic.GetFkRow(idRow);
 
+            //Assert
             for (int i = 0; i < result.Count; i++)
             {
                 Assert.AreEqual(expected[i].Id, result[i].Id);
@@ -87,9 +134,13 @@ namespace IntegerTestsBusinessLogic.Place
         [TestMethod]
         public void GetPlaceTest()
         {
-            PlaceModel expected = new PlaceModel(3, 2, 33);
-            PlaceModel result = placeLogic.GetPlace(3);
+            //Arrange
+            PlaceModel expected = placeLogic.GetPlace(idPlace);
 
+            //Act
+            PlaceModel result = placeLogic.GetPlace(idPlace);
+
+            //Assert
             Assert.AreEqual(expected.Id, result.Id);
             Assert.AreEqual(expected.IdRow, result.IdRow);
             Assert.AreEqual(expected.NumberPlace, result.NumberPlace);
@@ -98,11 +149,16 @@ namespace IntegerTestsBusinessLogic.Place
         [TestMethod]
         public void DeleteIdRowFromPlace()
         {
-            long id = 2;
-            placeLogic.DeleteIdRowFromPlace(id);
-            List<PlaceModel> result = placeLogic.GetFkRow(id);
+            //Arrange
+            long idPlace = placeLogic.AddPlace(idRow,200);
 
+            //Act
+            placeLogic.DeleteIdRowFromPlace(idPlace);
+            List<PlaceModel> result = placeLogic.GetFkRow(idPlace);
+
+            //Assert
             Assert.AreEqual(result.Count, 0);
         }
+
     }
 }

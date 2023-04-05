@@ -64,7 +64,7 @@ namespace DataAccess.Repositories.User
                 }
             }
 
-            return result.Single();
+            return result.SingleOrDefault();
         }
 
         public UserModel GetUserLogin(string login)

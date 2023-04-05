@@ -35,9 +35,12 @@ namespace UnitTestBusinessLogic.Tests.HallTests
         [TestMethod]
         public void DeleteHallTest()
         {
+            //Arrange
             long id = 3;
             HallModel result = null;
             List<HallModel> halls = logic.GetHalls();
+
+            //Act
             logic.DeleteHall(id);
 
             for (int i = 0; i < halls.Count; i++)
@@ -49,12 +52,14 @@ namespace UnitTestBusinessLogic.Tests.HallTests
                 }
             }
 
+            //Assert
             Assert.IsNull(result);
         }
 
         [TestMethod]
         public void GetFKCinemaTest()
         {
+            //Arrange
             long idCinema = 4;
             List<HallModel> expected = new List<HallModel>
             {
@@ -62,8 +67,11 @@ namespace UnitTestBusinessLogic.Tests.HallTests
                 new HallModel(2,4),
                 new HallModel(4,4)
             };
+
+            //Act
             List<HallModel> result = logic.GetFKCinema(idCinema);
 
+            //Assert
             for (int i = 0; i < expected.Count; i++)
             {
                 Assert.AreEqual(expected[i].Id, result[i].Id);
@@ -74,10 +82,14 @@ namespace UnitTestBusinessLogic.Tests.HallTests
         [TestMethod]
         public void GetHallTest()
         {
+            //Arrange
             long idHall = 3;
             HallModel expected = new HallModel(3, 3);
+
+            //Act
             HallModel result = logic.GetHall(idHall);
 
+            //Assert
             Assert.AreEqual(expected.Id, result.Id);
             Assert.AreEqual(expected.IdCinema, result.IdCinema);
         }
@@ -85,6 +97,7 @@ namespace UnitTestBusinessLogic.Tests.HallTests
         [TestMethod]
         public void GetHallsTest()
         {
+            //Arrange
             List<HallModel> expected = new List<HallModel>
             {
                 new HallModel(0,4),
@@ -95,8 +108,10 @@ namespace UnitTestBusinessLogic.Tests.HallTests
                 new HallModel(5,5)
             };
 
+            //Act
             List<HallModel> result = logic.GetHalls();
 
+            //Assert
             for (int i = 0; i < expected.Count; i++)
             {
                 Assert.AreEqual(expected[i].Id, result[i].Id);
@@ -107,10 +122,14 @@ namespace UnitTestBusinessLogic.Tests.HallTests
         [TestMethod]
         public void UpdateHallTest()
         {
+            //Arrange
             List<HallModel> halls = logic.GetHalls();
             HallModel expected = new HallModel(3, 134);
+
+            //Act
             logic.UpdateHall(new HallModel(3, 134));
 
+            //Assert
             Assert.AreEqual(expected.Id, halls[3].Id);
             Assert.AreEqual(expected.IdCinema, halls[3].IdCinema);
         }
@@ -118,10 +137,14 @@ namespace UnitTestBusinessLogic.Tests.HallTests
         [TestMethod]
         public void GetHallByIdMovieTest()
         {
+            //Arrange
             List<HallModel> expected = new List<HallModel>()
             { new HallModel(1, 1) };
+
+            //Act
             List<HallModel> result = logic.GetHallByIdMovie(1,1);
 
+            //Assert
             for (int i = 0; i < result.Count; i++)
             {
                 Assert.AreEqual(expected[i].Id, result[i].Id);
@@ -132,6 +155,7 @@ namespace UnitTestBusinessLogic.Tests.HallTests
         [TestMethod]
         public void GetHallByIdCinemaTest()
         {
+            //Arrange
             List<HallModel> expected = new List<HallModel>
             {
                 new HallModel(0,4),
@@ -139,8 +163,10 @@ namespace UnitTestBusinessLogic.Tests.HallTests
                 new HallModel(4,4)
             };
 
+            //Act
             List<HallModel> result = logic.GetHallByIdCinema(4);
-
+            
+            //Assert
             for (int i = 0; i < result.Count; i++)
             {
                 Assert.AreEqual(expected[i].Id, result[i].Id);

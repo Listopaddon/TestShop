@@ -1,10 +1,23 @@
-﻿using BusinessLogic.LogicBusiness.PlaceSession;
+﻿using BusinessLogic.LogicBusiness.Area;
+using BusinessLogic.LogicBusiness.Cinema;
+using BusinessLogic.LogicBusiness.Hall;
+using BusinessLogic.LogicBusiness.Movie;
+using BusinessLogic.LogicBusiness.Place;
+using BusinessLogic.LogicBusiness.PlaceSession;
+using BusinessLogic.LogicBusiness.Row;
 using BusinessLogic.LogicBusiness.Session;
 using DataAccess.Models;
 using DataAccess.Repositories;
+using DataAccess.Repositories.Area;
+using DataAccess.Repositories.Cinema;
+using DataAccess.Repositories.Hall;
+using DataAccess.Repositories.Movie;
+using DataAccess.Repositories.Place;
 using DataAccess.Repositories.PlaceSession;
+using DataAccess.Repositories.Row;
 using DataAccess.Repositories.Session;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
 
 namespace IntegerTestsBusinessLogic.SessionTests
@@ -13,42 +26,73 @@ namespace IntegerTestsBusinessLogic.SessionTests
     [TestClass]
     public class SessionLogicTests
     {
-        SessionLogic sLogic;
+        SessionLogic sessionLogic;
+        RowLogic rowLogic;
+        PlaceLogic placeLogic;
+        PlaceSessionLogic placeSessionLogic;
+        AreaLogic areaLogic;
+        CinemaLogic cinemaLogic;
+        HallLogic hallLogic;
+        MovieLogic movieLogic;
         string connectionString = ConnectionString.connectionStringFake;
+        long idMovie;
+        long idCinema;
+        long idHall;
 
         [TestInitialize]
         public void Initialize()
         {
-            sLogic = new SessionLogic(new SessionRepository(connectionString),
-                                      new PlaceSessionLogic(new PlaceSessionRepository(connectionString))); 
+            placeSessionLogic = new PlaceSessionLogic(new PlaceSessionRepository(connectionString));
+            placeLogic = new PlaceLogic(new PlaceRepository(connectionString), placeSessionLogic);
+            rowLogic = new RowLogic(new RowRepository(connectionString), placeLogic);
+            sessionLogic = new SessionLogic(new SessionRepository(connectionString), placeSessionLogic);
+            areaLogic = new AreaLogic(new AreaRepository(connectionString), rowLogic, placeLogic);
+            hallLogic = new HallLogic(new HallRepository(connectionString), areaLogic, sessionLogic);
+            cinemaLogic = new CinemaLogic(new CinemaRepository(connectionString), hallLogic);
+            movieLogic = new MovieLogic(new MovieRepository(connectionString), sessionLogic);
+
+            idMovie = movieLogic.AddMovie("TestMovie", "Test", DateTime.Now);
+            idCinema = cinemaLogic.AddCinema("TestCinema", "img");
+            idHall = hallLogic.AddHall(idCinema);
         }
 
         [TestMethod]
         public void AddSessionTest()
         {
-            long result = sLogic.AddSession(2, 3, 1200);
-            long expected = sLogic.GetSession(result).Id;
+            //Act
+            long result = sessionLogic.AddSession(idMovie, idHall, 100);
+            long expected = sessionLogic.GetSession(result).Id;
 
+            //Assert
             Assert.AreEqual(expected, result);
         }
 
         [TestMethod]
         public void DeleteSessionTest()
         {
-            long id = sLogic.AddSession(2, 3, 1200);
-            sLogic.DeleteSession(id);
-            SessionModel result = sLogic.GetSession(id);
+            //Arrange
+            long idSession = sessionLogic.AddSession(idMovie, idHall, 100);
+
+            //Act
+            sessionLogic.DeleteSession(idSession);
+            SessionModel result = sessionLogic.GetSession(idSession);
+
+            //Assert
             Assert.IsNull(result);
         }
 
         [TestMethod]
         public void UpdateSessionTest()
         {
-            long id = sLogic.AddSession(2, 3, 1200);
-            SessionModel expected = new SessionModel(id, 3, 3, 5000);
-            sLogic.UpdateSession(expected);
-            SessionModel result = sLogic.GetSession(id);
+            //Arrange
+            long idSession = sessionLogic.AddSession(idMovie, idHall, 1200);
+            SessionModel expected = new SessionModel(idSession, idMovie, idHall, 5000);
 
+            //Act
+            sessionLogic.UpdateSession(expected);
+            SessionModel result = sessionLogic.GetSession(idSession);
+
+            //Assert
             Assert.AreEqual(expected.Id, result.Id);
             Assert.AreEqual(expected.IdHall, result.IdHall);
             Assert.AreEqual(expected.IdMovie, result.IdMovie);
@@ -58,11 +102,14 @@ namespace IntegerTestsBusinessLogic.SessionTests
         [TestMethod]
         public void GetSessionsTest()
         {
-            List<SessionModel> expected = sLogic.GetSessions();
-            expected.Add(sLogic.GetSession(sLogic.AddSession(3, 3, 100)));
+            //Arrange
+            List<SessionModel> expected = sessionLogic.GetSessions();
+            expected.Add(sessionLogic.GetSession(sessionLogic.AddSession(idMovie, idHall, 100)));
 
-            List<SessionModel> result = sLogic.GetSessions();
+            //Act
+            List<SessionModel> result = sessionLogic.GetSessions();
 
+            //Assert
             for (int i = 0; i < result.Count; i++)
             {
                 Assert.AreEqual(expected[i].Id, result[i].Id);
@@ -75,10 +122,14 @@ namespace IntegerTestsBusinessLogic.SessionTests
         [TestMethod]
         public void GetSessionTest()
         {
-            long id = sLogic.AddSession(2, 3, 1200);
-            SessionModel expected = new SessionModel(id, 2, 3, 1200);
-            SessionModel result = sLogic.GetSession(id);
 
+            long idSession = sessionLogic.AddSession(idMovie, idHall, 1200);
+            SessionModel expected = new SessionModel(idSession, idMovie, idHall, 1200);
+
+            //Act
+            SessionModel result = sessionLogic.GetSession(idSession);
+
+            //Assert
             Assert.AreEqual(expected.Id, result.Id);
             Assert.AreEqual(expected.IdHall, result.IdHall);
             Assert.AreEqual(expected.IdMovie, result.IdMovie);
@@ -88,12 +139,15 @@ namespace IntegerTestsBusinessLogic.SessionTests
         [TestMethod]
         public void GetFKHallTest()
         {
-            long id = 3;
-            List<SessionModel> expected = sLogic.GetFkHall(id);
-            expected.Add(sLogic.GetSession(sLogic.AddSession(2, 3, 400)));
+            //Arrange
+            long idHall = hallLogic.AddHall(idCinema);
+            List<SessionModel> expected = sessionLogic.GetFkHall(idHall);
+            expected.Add(sessionLogic.GetSession(sessionLogic.AddSession(idMovie, idHall, 400)));
 
-            List<SessionModel> result = sLogic.GetFkHall(id);
+            //Act
+            List<SessionModel> result = sessionLogic.GetFkHall(idHall);
 
+            //Assert
             for (int i = 0; i < result.Count; i++)
             {
                 Assert.AreEqual(expected[i].Id, result[i].Id);
@@ -106,13 +160,16 @@ namespace IntegerTestsBusinessLogic.SessionTests
         [TestMethod]
         public void DeleteFKSessionsTest()
         {
-            int expected = 0;
-            long id = 2;
-            List<SessionModel> result = sLogic.GetFkHall(id);
-            sLogic.DeleteFKSessions(result);
-            result = sLogic.GetFkHall(id);
+            //Arrange
+            long idHall = hallLogic.AddHall(idCinema);
 
-            Assert.AreEqual(expected, result.Count);
+            //Act
+            List<SessionModel> result = sessionLogic.GetFkHall(idHall);
+            sessionLogic.DeleteFKSessions(result);
+            result = sessionLogic.GetFkHall(idHall);
+
+            //Assert
+            Assert.AreEqual(0, result.Count);
 
         }
     }
